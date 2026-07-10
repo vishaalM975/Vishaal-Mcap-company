@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Whistleblower &amp; Grievance — Module 58</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12182B;
+  --ink-2:#1B2440;
+  --paper:#EAEDF3;
+  --card:#FFFFFF;
+  --line:#D7DBE3;
+  --text:#1A2233;
+  --muted:#5B6478;
+  --seal:#7A1F2B;
+  --seal-tint:#F3E3E1;
+  --teal:#1F6F6B;
+  --teal-tint:#DEEDEB;
+  --amber:#B8862E;
+  --amber-tint:#F6ECD8;
+  --good:#2E7D5B;
+  --good-tint:#E1EFE7;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  background:var(--paper);
+  color:var(--text);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:14px;
+  display:flex;
+  min-height:100vh;
+}
+h1,h2,h3,.display{font-family:'Fraunces',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+
+/* ---------- SIDEBAR ---------- */
+#sidebar{
+  width:268px;
+  min-width:268px;
+  background:var(--ink);
+  color:#C9CFDD;
+  height:100vh;
+  position:sticky;
+  top:0;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+.brand{
+  padding:22px 20px 16px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.brand .eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.14em;
+  color:var(--seal);
+  background:rgba(122,31,43,0.18);
+  display:inline-block;
+  padding:2px 7px;
+  border-radius:2px;
+  margin-bottom:8px;
+}
+.brand h1{
+  font-size:19px;
+  font-weight:600;
+  color:#fff;
+  margin:0;
+  line-height:1.25;
+}
+.brand p{
+  font-size:11.5px;
+  color:#8B93A7;
+  margin:6px 0 0 0;
+  line-height:1.4;
+}
+.nav-group{padding:14px 10px;}
+.nav-group-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#6F7896;
+  padding:8px 12px 6px 12px;
+}
+.nav-item{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  width:100%;
+  text-align:left;
+  background:none;
+  border:none;
+  color:#C9CFDD;
+  padding:8px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:13px;
+  font-family:inherit;
+  line-height:1.35;
+}
+.nav-item .n{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  color:#6F7896;
+  min-width:16px;
+}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.nav-item.active{background:var(--seal);color:#fff;}
+.nav-item.active .n{color:rgba(255,255,255,0.75);}
+
+/* ---------- MAIN ---------- */
+#main{flex:1;min-width:0;display:flex;flex-direction:column;}
+#topbar{
+  background:var(--card);
+  border-bottom:1px solid var(--line);
+  padding:16px 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+#topbar .path{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:.04em;
+}
+#topbar h2{font-size:21px;margin:2px 0 0 0;font-weight:600;}
+#topbar .purpose{font-size:12.5px;color:var(--muted);margin-top:2px;}
+.conf-pill{
+  display:flex;align-items:center;gap:7px;
+  border:1px solid var(--seal);
+  color:var(--seal);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:.08em;
+  padding:6px 12px;
+  border-radius:20px;
+  white-space:nowrap;
+}
+.conf-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--seal);}
+
+#content{padding:28px 32px 60px 32px;}
+
+/* ---------- SHARED COMPONENTS ---------- */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px;}
+.stat-card{
+  background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;
+}
+.stat-card .label{font-size:11px;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;}
+.stat-card .value{font-family:'Fraunces',serif;font-size:28px;font-weight:600;margin-top:4px;}
+.stat-card .sub{font-size:11.5px;color:var(--muted);margin-top:3px;}
+.stat-card.accent-seal{border-color:var(--seal);background:var(--seal-tint);}
+.stat-card.accent-teal{border-color:var(--teal);background:var(--teal-tint);}
+.stat-card.accent-amber{border-color:var(--amber);background:var(--amber-tint);}
+.stat-card.accent-good{border-color:var(--good);background:var(--good-tint);}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin-bottom:20px;}
+.panel h3{font-size:15px;margin:0 0 14px 0;font-weight:600;display:flex;align-items:center;gap:8px;}
+.panel h3 .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);font-weight:400;}
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media (max-width:980px){.panel-grid{grid-template-columns:1fr;}}
+
+table{width:100%;border-collapse:collapse;font-size:12.8px;}
+th{
+  text-align:left;font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.04em;
+  padding:8px 10px;border-bottom:1px solid var(--line);font-weight:500;
+}
+td{padding:9px 10px;border-bottom:1px solid #EEF0F4;vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#FAFBFC;}
+
+/* seal badge — signature element */
+.seal{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;letter-spacing:.09em;font-weight:500;
+  border:1.5px solid currentColor;border-radius:50%;
+  width:58px;height:58px;text-align:center;line-height:1.15;
+  transform:rotate(-6deg);
+  padding:4px;
+  flex-shrink:0;
+}
+.seal.small{width:auto;height:auto;border-radius:20px;padding:3px 10px;transform:none;}
+.seal.open{color:var(--amber);}
+.seal.investigating{color:var(--teal);}
+.seal.closed{color:var(--good);}
+.seal.escalated{color:var(--seal);}
+
+.badge{
+  display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;
+  font-family:'IBM Plex Mono',monospace;letter-spacing:.02em;
+}
+.badge.b-amber{background:var(--amber-tint);color:var(--amber);}
+.badge.b-teal{background:var(--teal-tint);color:var(--teal);}
+.badge.b-good{background:var(--good-tint);color:var(--good);}
+.badge.b-seal{background:var(--seal-tint);color:var(--seal);}
+.badge.b-muted{background:#EEF0F4;color:var(--muted);}
+
+.bar-track{background:#EEF0F4;border-radius:6px;height:8px;width:100%;overflow:hidden;}
+.bar-fill{height:100%;border-radius:6px;}
+
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.pill{border:1px solid var(--line);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--muted);background:#fff;}
+.pill.active{border-color:var(--ink);color:var(--ink);font-weight:600;}
+
+.timeline{border-left:2px solid var(--line);margin-left:8px;padding-left:20px;}
+.tl-item{position:relative;padding-bottom:22px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-item::before{
+  content:'';position:absolute;left:-25.5px;top:2px;width:11px;height:11px;
+  border-radius:50%;background:var(--card);border:2.5px solid var(--teal);
+}
+.tl-item.done::before{background:var(--good);border-color:var(--good);}
+.tl-item.pending::before{background:var(--card);border-color:var(--line);}
+.tl-time{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);}
+.tl-title{font-weight:600;font-size:13px;margin:2px 0 3px 0;}
+.tl-desc{font-size:12.5px;color:var(--muted);}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field.full{grid-column:1/-1;}
+.field label{font-size:11.5px;color:var(--muted);font-weight:500;}
+.field input,.field select,.field textarea{
+  border:1px solid var(--line);border-radius:7px;padding:9px 11px;font-size:13px;
+  font-family:inherit;background:#FCFCFD;color:var(--text);
+}
+.field textarea{resize:vertical;min-height:70px;}
+.btn{
+  border:none;border-radius:7px;padding:10px 18px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;
+}
+.btn-seal{background:var(--seal);color:#fff;}
+.btn-ghost{background:none;border:1px solid var(--line);color:var(--text);}
+
+.note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:2px;}
+.kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #EEF0F4;font-size:12.8px;}
+.kv:last-child{border-bottom:none;}
+.kv .k{color:var(--muted);}
+
+.chip-list{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{background:#EEF0F4;border-radius:6px;padding:6px 10px;font-size:12px;display:flex;align-items:center;gap:6px;}
+
+.hbar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.hbar-row .lab{width:150px;font-size:12.5px;color:var(--text);flex-shrink:0;}
+.hbar-row .val{width:34px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);text-align:right;}
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div class="brand">
+    <span class="eyebrow">MODULE 58 · GOVERNANCE &amp; AUDIT MGMT</span>
+    <h1>Whistleblower &amp; Grievance</h1>
+    <p>Confidential ethics &amp; grievance channel — intake through closure, feeding board-level governance reporting.</p>
+  </div>
+  <div id="nav-container"></div>
+</div>
+
+<div id="main">
+  <div id="topbar">
+    <div>
+      <div class="path" id="topbath">SIGNATURE · CASE OPERATIONS</div>
+      <h2 id="topttl">Anonymous Intake Channel</h2>
+      <div class="purpose" id="toppurp">Multi-mode confidential reporting</div>
+    </div>
+    <div class="conf-pill"><span class="dot"></span>CONFIDENTIAL CHANNEL</div>
+  </div>
+  <div id="content"></div>
+</div>
+
+<script>
+const PAGES = [
+  {n:1,group:"Case Operations",type:"Signature",title:"Anonymous Intake Channel",purpose:"Multi-mode confidential reporting",render:"pIntake"},
+  {n:2,group:"Case Operations",type:"Signature",title:"Case Triage & Categorisation",purpose:"Classify and prioritise",render:"pTriage"},
+  {n:3,group:"Case Operations",type:"Signature",title:"Conflict-Free Assignment",purpose:"Independent handler allocation",render:"pAssignment"},
+  {n:4,group:"Case Operations",type:"Signature",title:"Investigation Tracking",purpose:"Manage each complaint to closure",render:"pInvestigation"},
+  {n:5,group:"Case Operations",type:"Signature",title:"Whistleblower Protection",purpose:"Anti-retaliation safeguards",render:"pProtection"},
+  {n:6,group:"Case Operations",type:"Signature",title:"SLA & Ageing Monitor",purpose:"Timeliness of resolution",render:"pSLA"},
+  {n:7,group:"Case Operations",type:"Signature",title:"Substantiation Outcome",purpose:"Founded/unfounded disposition",render:"pOutcome"},
+  {n:8,group:"Case Operations",type:"Signature",title:"Disciplinary-Action Linkage",purpose:"Consequence management",render:"pDiscipline"},
+  {n:9,group:"Insight & Governance",type:"Signature",title:"Trend & Hotspot Analytics",purpose:"Recurring issue areas",render:"pTrends"},
+  {n:10,group:"Insight & Governance",type:"Signature",title:"Committee / Board Reporting",purpose:"Governance-level summaries",render:"pBoard"},
+  {n:11,group:"Insight & Governance",type:"Signature",title:"Confidentiality Controls",purpose:"Access-restricted case data",render:"pConfidentiality"},
+  {n:12,group:"Insight & Governance",type:"Signature",title:"Feedback to Complainant",purpose:"Closure communication",render:"pFeedback"},
+  {n:13,group:"Insight & Governance",type:"Signature",title:"Repeat-Complaint Linkage",purpose:"Connect related cases",render:"pRepeat"},
+  {n:14,group:"Insight & Governance",type:"Signature",title:"POSH / HR Grievance Split",purpose:"Route to correct forum",render:"pSplit"},
+  {n:15,group:"Insight & Governance",type:"Signature",title:"Ethics-Culture Survey",purpose:"Speak-up climate measurement",render:"pSurvey"},
+  {n:16,group:"Audit Framework",type:"Shell",title:"Module Dashboard & KPIs",purpose:"Live risk score, open exceptions, coverage % and trend",render:"pDashboard"},
+  {n:17,group:"Audit Framework",type:"Shell",title:"Scope & Audit Universe",purpose:"Define the auditable units/entities/processes in scope",render:"pScope"},
+  {n:18,group:"Audit Framework",type:"Shell",title:"Risk & Control Matrix (RCM)",purpose:"Catalogue risks, controls, assertions and control owners",render:"pRCM"},
+  {n:19,group:"Audit Framework",type:"Shell",title:"Test & Analytics Rule Library",purpose:"Configure automated red-flag rules, thresholds and CAAT scripts",render:"pRules"},
+  {n:20,group:"Audit Framework",type:"Shell",title:"Data Source & Connector Setup",purpose:"Map ERP tables/APIs/uploads feeding this module's analytics",render:"pConnectors"},
+  {n:21,group:"Audit Framework",type:"Shell",title:"Sampling & Population Builder",purpose:"Draw statistical or judgemental samples from the population",render:"pSampling"},
+  {n:22,group:"Audit Framework",type:"Shell",title:"Exception & Red-Flag Queue",purpose:"Triage system-generated exceptions with disposition",render:"pExceptions"},
+  {n:23,group:"Audit Framework",type:"Shell",title:"Working Papers & Evidence",purpose:"Attach evidence, tick-marks, screenshots and sign-off",render:"pWorkingPapers"},
+  {n:24,group:"Audit Framework",type:"Shell",title:"Observation & Finding Log",purpose:"Raise, grade, and route findings for this domain",render:"pFindings"},
+  {n:25,group:"Audit Framework",type:"Shell",title:"Remediation / Action Tracker",purpose:"Track CAPA items, owners, due dates and re-testing status",render:"pRemediation"},
+];
+
+/* ---------------- MOCK DATA ---------------- */
+const CASES = [
+  {id:"WB-2026-0114",title:"Vendor kickback allegation — Procurement (West Region)",cat:"Fraud & Corruption",channel:"Web form (anon)",status:"investigating",risk:"High",days:22,sla:30,handler:"E. Fontaine (Ext. Counsel)"},
+  {id:"WB-2026-0113",title:"Falsified inspection records — Plant 4 QA",cat:"Compliance",channel:"Hotline call",status:"open",risk:"High",days:4,sla:30,handler:"Unassigned"},
+  {id:"WB-2026-0111",title:"Manager favoritism in overtime allocation",cat:"HR Grievance",channel:"Email",status:"closed",risk:"Low",days:19,sla:20,handler:"S. Nair (HRBP)"},
+  {id:"WB-2026-0109",title:"Alleged workplace harassment — Sales team lead",cat:"POSH",risk:"High",channel:"In-person",status:"escalated",days:11,sla:15,handler:"POSH Internal Committee"},
+  {id:"WB-2026-0107",title:"Data privacy breach — customer records exported",cat:"IT & Data",channel:"Mobile app (anon)",status:"investigating",risk:"Medium",days:15,sla:30,handler:"R. Kapoor (Internal Audit)"},
+  {id:"WB-2026-0104",title:"Expense report irregularities — regional sales",cat:"Fraud & Corruption",channel:"Web form (anon)",status:"closed",risk:"Medium",days:27,sla:30,handler:"E. Fontaine (Ext. Counsel)"},
+];
+
+function sealClass(status){return {open:"open",investigating:"investigating",closed:"closed",escalated:"escalated"}[status]||"open";}
+function sealLabel(status){return {open:"OPEN",investigating:"UNDER\nREVIEW",closed:"CLOSED\n& SEALED",escalated:"ESCALATED"}[status]||status.toUpperCase();}
+
+/* ---------------- SHARED RENDER HELPERS ---------------- */
+function h(strings,...vals){return strings.reduce((acc,s,i)=>acc+s+(vals[i]!==undefined?vals[i]:""),"");}
+
+function statGrid(items){
+  return `<div class="stat-grid">${items.map(it=>`
+    <div class="stat-card ${it.accent?`accent-${it.accent}`:""}">
+      <div class="label">${it.label}</div>
+      <div class="value">${it.value}</div>
+      ${it.sub?`<div class="sub">${it.sub}</div>`:""}
+    </div>`).join("")}</div>`;
+}
+
+function panel(title,key,inner){
+  return `<div class="panel"><h3>${title} ${key?`<span class="k">${key}</span>`:""}</h3>${inner}</div>`;
+}
+
+function caseTable(rows,cols){
+  cols = cols || ["id","title","cat","status","days","handler"];
+  const headerMap = {id:"Case ID",title:"Summary",cat:"Category",status:"Status",days:"Days Open",handler:"Handler",risk:"Risk",channel:"Channel",sla:"SLA (days)"};
+  return `<table><thead><tr>${cols.map(c=>`<th>${headerMap[c]}</th>`).join("")}</tr></thead><tbody>
+    ${rows.map(r=>`<tr>${cols.map(c=>{
+      if(c==="id") return `<td class="mono">${r.id}</td>`;
+      if(c==="status") return `<td><span class="seal small ${sealClass(r.status)}">${r.status[0].toUpperCase()+r.status.slice(1)}</span></td>`;
+      if(c==="risk") return `<td><span class="badge ${r.risk==="High"?"b-seal":r.risk==="Medium"?"b-amber":"b-good"}">${r.risk}</span></td>`;
+      return `<td>${r[c]}</td>`;
+    }).join("")}</tr>`).join("")}
+  </tbody></table>`;
+}
+
+function setTop(p){
+  document.getElementById("topbath").textContent = `${p.type.toUpperCase()} · ${p.group.toUpperCase()}`;
+  document.getElementById("topttl").textContent = p.title;
+  document.getElementById("toppurp").textContent = p.purpose;
+}
+
+function buildNav(){
+  const groups = {};
+  PAGES.forEach(p=>{ (groups[p.group]=groups[p.group]||[]).push(p); });
+  let out = "";
+  Object.keys(groups).forEach(g=>{
+    out += `<div class="nav-group"><div class="nav-group-label">${g}</div>`;
+    groups[g].forEach(p=>{
+      out += `<button class="nav-item" data-n="${p.n}" onclick="go(${p.n})"><span class="n">${String(p.n).padStart(2,"0")}</span><span>${p.title}</span></button>`;
+    });
+    out += `</div>`;
+  });
+  document.getElementById("nav-container").innerHTML = out;
+}
+
+function go(n){
+  const p = PAGES.find(x=>x.n===n);
+  setTop(p);
+  document.querySelectorAll(".nav-item").forEach(el=>el.classList.toggle("active",Number(el.dataset.n)===n));
+  document.getElementById("content").innerHTML = window[p.render]();
+  window.scrollTo(0,0);
+}
+
+/* ================= SIGNATURE PAGES ================= */
+
+function pIntake(){
+  return `
+  ${statGrid([
+    {label:"Reports this month",value:"18",sub:"+4 vs prior month",accent:"teal"},
+    {label:"Anonymous submissions",value:"72%",sub:"of total intake"},
+    {label:"Channels live",value:"5",sub:"web · hotline · app · email · in-person"},
+    {label:"Avg. intake-to-triage",value:"6.4 hrs",accent:"good"},
+  ])}
+  <div class="panel-grid">
+    <div class="panel"><h3>File a report <span class="k">ANONYMOUS BY DEFAULT</span></h3>
+      <div class="form-grid">
+        <div class="field full"><label>Nature of concern</label>
+          <select><option>Fraud & Corruption</option><option>Compliance / Regulatory</option><option>POSH / Harassment</option><option>HR Grievance</option><option>IT & Data</option><option>Health & Safety</option></select>
+        </div>
+        <div class="field"><label>Entity / location</label><input placeholder="e.g. Plant 4, West Region"></div>
+        <div class="field"><label>When did this occur</label><input type="text" placeholder="e.g. Ongoing, since March"></div>
+        <div class="field full"><label>Description</label><textarea placeholder="Describe what you observed. You do not need to identify yourself."></textarea></div>
+        <div class="field full"><label>Supporting evidence</label>
+          <div class="chip-list"><span class="chip">📎 invoice_scan.pdf</span><span class="chip">📎 email_thread.eml</span><span class="chip">+ Add file</span></div>
+        </div>
+        <div class="field"><label>Identity</label><select><option>Remain fully anonymous</option><option>Confidential — reveal to handler only</option><option>Identified</option></select></div>
+        <div class="field"><label>Preferred contact for follow-up</label><input placeholder="Anonymous mailbox ID generated on submit"></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;"><button class="btn btn-seal">Submit report</button><button class="btn btn-ghost">Save draft</button></div>
+      <p class="note">Every submission is encrypted at rest and routed only to conflict-checked handlers (see Confidentiality Controls). No IP address, device ID, or metadata is retained for anonymous submissions.</p>
+    </div>
+    <div class="panel"><h3>Intake channels</h3>
+      <table><thead><tr><th>Channel</th><th>Availability</th><th>Volume (30d)</th></tr></thead><tbody>
+      <tr><td>Web form</td><td><span class="badge b-good">Live</span></td><td>9</td></tr>
+      <tr><td>Toll-free hotline (24×7)</td><td><span class="badge b-good">Live</span></td><td>4</td></tr>
+      <tr><td>Mobile app</td><td><span class="badge b-good">Live</span></td><td>3</td></tr>
+      <tr><td>Dedicated ethics mailbox</td><td><span class="badge b-good">Live</span></td><td>1</td></tr>
+      <tr><td>In-person / ombudsperson</td><td><span class="badge b-good">Live</span></td><td>1</td></tr>
+      </tbody></table>
+      <p class="note" style="margin-top:12px;">A unique case reference and anonymous reply mailbox are issued instantly, so a reporter can check status or add information later without revealing identity.</p>
+    </div>
+  </div>`;
+}
+
+function pTriage(){
+  const cols = {"New":["WB-2026-0113"],"Categorising":["WB-2026-0107"],"Prioritised":["WB-2026-0114","WB-2026-0109"],"Sent to assignment":["WB-2026-0104"]};
+  const meta = Object.fromEntries(CASES.map(c=>[c.id,c]));
+  return `
+  ${statGrid([
+    {label:"Awaiting triage",value:"3",accent:"amber"},
+    {label:"Median triage time",value:"1.8 days"},
+    {label:"High-risk this week",value:"2",accent:"seal"},
+  ])}
+  <div class="panel"><h3>Triage board</h3>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+  ${Object.entries(cols).map(([lane,ids])=>`
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">${lane} · ${ids.length}</div>
+      ${ids.map(id=>{const c=meta[id];return `<div style="border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#fff;">
+        <div class="mono" style="font-size:10.5px;color:var(--muted);">${c.id}</div>
+        <div style="font-size:12.5px;font-weight:500;margin:4px 0 6px 0;">${c.title}</div>
+        <span class="badge ${c.risk==="High"?"b-seal":"b-amber"}">${c.risk} risk</span> <span class="badge b-teal">${c.cat}</span>
+      </div>`}).join("")}
+    </div>`).join("")}
+  </div></div>
+  <div class="panel"><h3>Categorisation rules <span class="k">AUTO-CLASSIFY</span></h3>
+    <table><thead><tr><th>Keyword / signal</th><th>Suggested category</th><th>Auto risk floor</th></tr></thead><tbody>
+    <tr><td>"kickback", "vendor payment", "gift"</td><td>Fraud & Corruption</td><td><span class="badge b-seal">High</span></td>
+    <tr><td>"touch", "comment", "uncomfortable"</td><td>POSH</td><td><span class="badge b-seal">High</span></td>
+    <tr><td>"overtime", "favoritism", "shift roster"</td><td>HR Grievance</td><td><span class="badge b-good">Low</span></td>
+    <tr><td>"export data", "customer records", "USB"</td><td>IT & Data</td><td><span class="badge b-amber">Medium</span></td>
+    </tbody></table>
+  </div>`;
+}
+
+function pAssignment(){
+  return `
+  ${statGrid([{label:"Unassigned cases",value:"1",accent:"amber"},{label:"Conflict checks this month",value:"18"},{label:"External referrals",value:"2",sub:"where internal conflict found"}])}
+  <div class="panel-grid">
+    <div class="panel"><h3>Conflict-of-interest screen — WB-2026-0113</h3>
+      <div class="kv"><span class="k">Subject entity</span><span>Plant 4, Quality Assurance</span></div>
+      <div class="kv"><span class="k">Candidate handlers screened</span><span>6</span></div>
+      <div class="kv"><span class="k">Excluded — reporting line conflict</span><span>2</span></div>
+      <div class="kv"><span class="k">Excluded — prior involvement</span><span>1</span></div>
+      <div class="kv"><span class="k">Eligible pool</span><span>3</span></div>
+      <div style="margin-top:14px;">
+        <table><thead><tr><th>Handler</th><th>Function</th><th>Current caseload</th><th>Action</th></tr></thead><tbody>
+        <tr><td>R. Kapoor</td><td>Internal Audit</td><td>3 open</td><td><button class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">Assign</button></td></tr>
+        <tr><td>M. Alavi</td><td>Compliance</td><td>1 open</td><td><button class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">Assign</button></td></tr>
+        <tr><td>E. Fontaine</td><td>External counsel (panel)</td><td>2 open</td><td><button class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">Assign</button></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="panel"><h3>Allocation rules</h3>
+      <ul style="margin:0;padding-left:18px;font-size:12.8px;line-height:2;">
+        <li>Handler must sit ≥2 reporting levels from any named subject</li>
+        <li>No prior investigative or advisory role on related parties in 24 months</li>
+        <li>High-risk fraud &amp; corruption cases require an external-panel co-reviewer</li>
+        <li>POSH cases route only to the Internal Committee (see Sub-page 14)</li>
+        <li>Caseload capped at 5 concurrent open matters per handler</li>
+      </ul>
+      <p class="note" style="margin-top:12px;">Assignment decisions and the conflict-check rationale are logged immutably for board and regulator review.</p>
+    </div>
+  </div>`;
+}
+
+function pInvestigation(){
+  return `
+  ${statGrid([{label:"Active investigations",value:"3",accent:"teal"},{label:"Avg. duration to date",value:"17 days"},{label:"Interviews scheduled",value:"5"}])}
+  <div class="panel"><h3>WB-2026-0114 <span class="k">Vendor kickback allegation</span></h3>
+    <div class="timeline">
+      <div class="tl-item done"><div class="tl-time">Day 1 — Jun 18</div><div class="tl-title">Report received & acknowledged</div><div class="tl-desc">Anonymous mailbox WB-M-0447 issued to reporter.</div></div>
+      <div class="tl-item done"><div class="tl-time">Day 3 — Jun 20</div><div class="tl-title">Conflict-free handler assigned</div><div class="tl-desc">E. Fontaine (external counsel) appointed lead investigator.</div></div>
+      <div class="tl-item done"><div class="tl-time">Day 6 — Jun 23</div><div class="tl-title">Evidence preservation notice issued</div><div class="tl-desc">Procurement system access logs and email archives placed on hold.</div></div>
+      <div class="tl-item"><div class="tl-time">Day 14 — Jul 1</div><div class="tl-title">Subject &amp; witness interviews</div><div class="tl-desc">3 of 4 planned interviews completed; transcripts attached to working papers.</div></div>
+      <div class="tl-item pending"><div class="tl-time">Day 26 (est.) — Jul 13</div><div class="tl-title">Findings memo drafted</div><div class="tl-desc">Pending final interview and vendor payment reconciliation.</div></div>
+      <div class="tl-item pending"><div class="tl-time">Day 30 (SLA) — Jul 17</div><div class="tl-title">Disposition & closure</div><div class="tl-desc">Not yet reached.</div></div>
+    </div>
+  </div>
+  <div class="panel"><h3>All active matters</h3>${caseTable(CASES.filter(c=>c.status==="investigating"||c.status==="escalated"),["id","title","risk","handler","days"])}</div>`;
+}
+
+function pProtection(){
+  return `
+  ${statGrid([{label:"Reporters under active protection",value:"7",accent:"seal"},{label:"Retaliation concerns raised",value:"1",sub:"this quarter"},{label:"Substantiated retaliation",value:"0"}])}
+  <div class="panel-grid">
+    <div class="panel"><h3>Safeguards on file — WB-2026-0114</h3>
+      <div class="chip-list">
+        <span class="chip">🔒 Identity sealed from line management</span>
+        <span class="chip">📆 Career-action monitor (12 months)</span>
+        <span class="chip">🚫 No-contact directive to named subjects</span>
+        <span class="chip">👤 Independent HR check-in, monthly</span>
+      </div>
+      <p class="note" style="margin-top:12px;">Any adverse HR action (transfer, appraisal downgrade, disciplinary notice) touching a protected reporter is auto-flagged here for review before it takes effect.</p>
+    </div>
+    <div class="panel"><h3>Retaliation watch-list</h3>
+      <table><thead><tr><th>Case</th><th>Protection start</th><th>Monitor status</th></tr></thead><tbody>
+      <tr><td class="mono">WB-2026-0114</td><td>Jun 20, 2026</td><td><span class="badge b-teal">Active — monthly check-in</span></td></tr>
+      <tr><td class="mono">WB-2026-0109</td><td>Jun 29, 2026</td><td><span class="badge b-amber">Concern raised — under review</span></td></tr>
+      <tr><td class="mono">WB-2026-0107</td><td>Jul 2, 2026</td><td><span class="badge b-teal">Active — monthly check-in</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>`;
+}
+
+function pSLA(){
+  const rows = CASES.filter(c=>c.status!=="closed");
+  return `
+  ${statGrid([{label:"On track",value:"2",accent:"good"},{label:"At risk (>75% of SLA)",value:"1",accent:"amber"},{label:"Breached",value:"1",accent:"seal"}])}
+  <div class="panel"><h3>Ageing against SLA</h3>
+  ${rows.map(c=>{
+    const pct = Math.min(100,Math.round(c.days/c.sla*100));
+    const color = pct>=100?"var(--seal)":pct>=75?"var(--amber)":"var(--good)";
+    return `<div class="hbar-row">
+      <div class="lab mono">${c.id}</div>
+      <div style="flex:1;"><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div></div>
+      <div class="val">${c.days}/${c.sla}d</div>
+    </div>`;
+  }).join("")}
+  <p class="note" style="margin-top:6px;">SLA clocks pause automatically during reporter-requested delays or legal hold, and restart on resumption — pauses are logged for audit.</p>
+  </div>`;
+}
+
+function pOutcome(){
+  return `
+  ${statGrid([{label:"Founded",value:"38%",accent:"seal"},{label:"Partially founded",value:"21%",accent:"amber"},{label:"Unfounded",value:"31%",accent:"good"},{label:"Inconclusive",value:"10%"}])}
+  <div class="panel"><h3>Recent dispositions</h3>
+  <table><thead><tr><th>Case</th><th>Summary</th><th>Disposition</th><th>Closed</th></tr></thead><tbody>
+  <tr><td class="mono">WB-2026-0111</td><td>Manager favoritism in overtime allocation</td><td><span class="badge b-amber">Partially founded</span></td><td>Jun 30, 2026</td></tr>
+  <tr><td class="mono">WB-2026-0104</td><td>Expense report irregularities</td><td><span class="badge b-seal">Founded</span></td><td>Jun 27, 2026</td></tr>
+  <tr><td class="mono">WB-2026-0098</td><td>Alleged nepotism in vendor selection</td><td><span class="badge b-good">Unfounded</span></td><td>Jun 12, 2026</td></tr>
+  </tbody></table>
+  <p class="note" style="margin-top:12px;">Disposition requires dual sign-off — lead investigator and an independent reviewer — before a case can move to closure.</p>
+  </div>`;
+}
+
+function pDiscipline(){
+  return `
+  ${statGrid([{label:"Actions linked this quarter",value:"6"},{label:"Terminations",value:"1",accent:"seal"},{label:"Written warnings",value:"3",accent:"amber"},{label:"Process retraining",value:"2",accent:"good"}])}
+  <div class="panel"><h3>Consequence register</h3>
+  <table><thead><tr><th>Case</th><th>Finding</th><th>Action taken</th><th>Owner</th><th>Status</th></tr></thead><tbody>
+  <tr><td class="mono">WB-2026-0104</td><td>Founded — expense fraud</td><td>Termination + recovery of funds</td><td>HR Director</td><td><span class="badge b-good">Closed</span></td></tr>
+  <tr><td class="mono">WB-2026-0111</td><td>Partially founded — favoritism</td><td>Written warning + roster process retraining</td><td>HRBP</td><td><span class="badge b-teal">In progress</span></td></tr>
+  <tr><td class="mono">WB-2026-0098</td><td>Unfounded</td><td>No action; process note only</td><td>—</td><td><span class="badge b-good">Closed</span></td></tr>
+  </tbody></table>
+  <p class="note" style="margin-top:12px;">Linkage is one-directional from case to HR disciplinary record — the disciplinary system never exposes reporter identity back into this module.</p>
+  </div>`;
+}
+
+function pTrends(){
+  const cats = [["Fraud & Corruption",34,"seal"],["HR Grievance",26,"amber"],["Compliance",18,"teal"],["POSH",12,"seal"],["IT & Data",10,"teal"]];
+  return `
+  ${statGrid([{label:"Reports YTD",value:"142"},{label:"Top hotspot",value:"West Region Procurement",accent:"seal"},{label:"Repeat-issue entities",value:"4"}])}
+  <div class="panel-grid">
+    <div class="panel"><h3>Category mix (YTD)</h3>
+    ${cats.map(([label,pct,tone])=>`<div class="hbar-row"><div class="lab">${label}</div><div style="flex:1;"><div class="bar-track"><div class="bar-fill" style="width:${pct*2}%;background:var(--${tone});"></div></div></div><div class="val">${pct}%</div></div>`).join("")}
+    </div>
+    <div class="panel"><h3>Hotspot entities</h3>
+    <table><thead><tr><th>Entity</th><th>Reports (12mo)</th><th>Trend</th></tr></thead><tbody>
+    <tr><td>West Region Procurement</td><td>9</td><td><span class="badge b-seal">↑ rising</span></td></tr>
+    <tr><td>Plant 4 — QA</td><td>5</td><td><span class="badge b-amber">↑ rising</span></td></tr>
+    <tr><td>Regional Sales — South</td><td>4</td><td><span class="badge b-good">↓ falling</span></td></tr>
+    <tr><td>Customer Data Platform team</td><td>3</td><td><span class="badge b-muted">flat</span></td></tr>
+    </tbody></table>
+    </div>
+  </div>`;
+}
+
+function pBoard(){
+  return `
+  <div class="panel"><h3>Q2 FY26 — Audit &amp; Ethics Committee summary <span class="k">DRAFT</span></h3>
+  ${statGrid([{label:"Reports received",value:"41"},{label:"Closed within SLA",value:"87%",accent:"good"},{label:"Founded rate",value:"38%",accent:"seal"},{label:"Open >60 days",value:"1",accent:"amber"}])}
+  <div class="kv"><span class="k">Notable matters for committee attention</span><span>WB-2026-0114 (procurement, high risk, external counsel engaged)</span></div>
+  <div class="kv"><span class="k">Retaliation concerns</span><span>1 raised, under independent review, 0 substantiated YTD</span></div>
+  <div class="kv"><span class="k">Speak-up culture index</span><span>7.4 / 10 (see Ethics-Culture Survey)</span></div>
+  <div style="margin-top:16px;display:flex;gap:10px;"><button class="btn btn-seal">Generate board pack (PDF)</button><button class="btn btn-ghost">Send to Committee Chair</button></div>
+  </div>`;
+}
+
+function pConfidentiality(){
+  return `
+  <div class="panel-grid">
+    <div class="panel"><h3>Access matrix</h3>
+    <table><thead><tr><th>Role</th><th>Case list</th><th>Reporter identity</th><th>Evidence</th></tr></thead><tbody>
+    <tr><td>Assigned handler</td><td><span class="badge b-good">Own cases</span></td><td><span class="badge b-amber">If disclosed</span></td><td><span class="badge b-good">Full</span></td></tr>
+    <tr><td>Compliance officer</td><td><span class="badge b-good">All cases</span></td><td><span class="badge b-seal">Sealed</span></td><td><span class="badge b-amber">Summary only</span></td></tr>
+    <tr><td>Board / Audit Committee</td><td><span class="badge b-amber">Aggregated</span></td><td><span class="badge b-seal">Sealed</span></td><td><span class="badge b-seal">None</span></td></tr>
+    <tr><td>Line management</td><td><span class="badge b-seal">No access</span></td><td><span class="badge b-seal">Sealed</span></td><td><span class="badge b-seal">None</span></td></tr>
+    </tbody></table>
+    </div>
+    <div class="panel"><h3>Controls in force</h3>
+    <ul style="margin:0;padding-left:18px;line-height:2;font-size:12.8px;">
+      <li>Field-level encryption on reporter identity and free-text narrative</li>
+      <li>Access logged and reviewed monthly by Compliance</li>
+      <li>Two-person rule to unseal an anonymous identity, only where legally compelled</li>
+      <li>Auto-redaction of names/emails in any exported report</li>
+      <li>Session recording disabled for this module in shared-screen reviews</li>
+    </ul>
+    </div>
+  </div>`;
+}
+
+function pFeedback(){
+  return `
+  ${statGrid([{label:"Closure notices sent (30d)",value:"4"},{label:"Reporter satisfaction",value:"4.2 / 5"},{label:"Awaiting acknowledgement",value:"1",accent:"amber"}])}
+  <div class="panel"><h3>Closure message — WB-2026-0111 <span class="k">SENT TO ANON MAILBOX</span></h3>
+  <div style="background:#FAFBFC;border:1px solid var(--line);border-radius:8px;padding:14px 16px;font-size:12.8px;line-height:1.7;">
+  Thank you for raising this concern. We investigated the overtime allocation process you flagged and found the concern <b>partially substantiated</b>. Corrective action has been taken with the manager involved, and the overtime roster process has been revised. Because of confidentiality obligations to all parties, we are unable to share individual disciplinary details. If you have further information, you may reply to this anonymous mailbox at any time.
+  </div>
+  <p class="note" style="margin-top:10px;">Feedback templates are pre-approved by Legal per disposition type to prevent over-disclosure while still closing the loop with the reporter.</p>
+  </div>`;
+}
+
+function pRepeat(){
+  return `
+  <div class="panel"><h3>Linked-case graph — West Region Procurement</h3>
+  <table><thead><tr><th>Case</th><th>Filed</th><th>Link basis</th><th>Status</th></tr></thead><tbody>
+  <tr><td class="mono">WB-2026-0114</td><td>Jun 18, 2026</td><td>Same entity + same vendor code</td><td><span class="seal small investigating">Investigating</span></td></tr>
+  <tr><td class="mono">WB-2025-0871</td><td>Nov 3, 2025</td><td>Same entity, different vendor</td><td><span class="seal small closed">Closed — unfounded</span></td></tr>
+  <tr><td class="mono">WB-2025-0640</td><td>Aug 14, 2025</td><td>Named subject overlap</td><td><span class="seal small closed">Closed — founded</span></td></tr>
+  </tbody></table>
+  <p class="note" style="margin-top:12px;">Matching runs on entity, named subjects, vendor/customer codes and narrative similarity — a repeat pattern auto-elevates risk rating on the newest case (see Case Triage).</p>
+  </div>`;
+}
+
+function pSplit(){
+  return `
+  <div class="panel"><h3>Routing logic</h3>
+  <table><thead><tr><th>Signal detected</th><th>Routed to</th><th>Governing process</th></tr></thead><tbody>
+  <tr><td>Sexual harassment, hostile environment, gender-based conduct</td><td><span class="badge b-seal">POSH Internal Committee</span></td><td>Statutory POSH timeline (90 days)</td></tr>
+  <tr><td>Pay, roster, performance, interpersonal conflict</td><td><span class="badge b-teal">HR Grievance process</span></td><td>Standard HR grievance SLA</td></tr>
+  <tr><td>Fraud, bribery, regulatory breach</td><td><span class="badge b-amber">Ethics / Compliance</span></td><td>This module's investigation track</td></tr>
+  </tbody></table>
+  <p class="note" style="margin-top:12px;">A case can be split across tracks — e.g. a POSH finding that also triggers an HR disciplinary action links back through Disciplinary-Action Linkage.</p>
+  </div>
+  <div class="panel"><h3>Current split queue</h3>${caseTable(CASES.filter(c=>c.cat==="POSH"||c.cat==="HR Grievance"),["id","title","cat","status"])}</div>`;
+}
+
+function pSurvey(){
+  return `
+  ${statGrid([{label:"Speak-up climate index",value:"7.4/10",accent:"good"},{label:"Response rate",value:"64%"},{label:"Would report again",value:"81%",accent:"good"},{label:"Fear of retaliation (any)",value:"14%",accent:"amber"}])}
+  <div class="panel"><h3>Sentiment by function</h3>
+  ${[["Procurement",6.1,"amber"],["Sales",7.0,"teal"],["Manufacturing",7.6,"good"],["Corporate / HQ",8.2,"good"],["IT",7.3,"teal"]].map(([f,score,tone])=>`
+    <div class="hbar-row"><div class="lab">${f}</div><div style="flex:1;"><div class="bar-track"><div class="bar-fill" style="width:${score*10}%;background:var(--${tone});"></div></div></div><div class="val">${score}</div></div>`).join("")}
+  <p class="note" style="margin-top:8px;">Annual pulse survey run independently of case data — no individual response can be linked back to a reporter or a specific case.</p>
+  </div>`;
+}
+
+/* ================= SHELL / AUDIT FRAMEWORK PAGES ================= */
+
+function pDashboard(){
+  return `
+  ${statGrid([
+    {label:"Module risk score",value:"6.2 / 10",accent:"amber",sub:"Moderate — driven by procurement matter"},
+    {label:"Open exceptions",value:"9",accent:"seal"},
+    {label:"Control coverage",value:"92%",accent:"good"},
+    {label:"Findings open",value:"3",accent:"amber"},
+    {label:"SLA compliance (90d)",value:"87%"},
+    {label:"CAPA overdue",value:"1",accent:"seal"},
+  ])}
+  <div class="panel-grid">
+    <div class="panel"><h3>Trend — reports received</h3>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:120px;">
+      ${[12,9,15,11,18,14].map((v,i)=>`<div style="flex:1;background:var(--teal-tint);border-radius:4px 4px 0 0;height:${v*6}px;position:relative;"><div style="position:absolute;bottom:100%;left:0;right:0;text-align:center;font-size:10px;color:var(--muted);">${v}</div></div>`).join("")}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:6px;">${["Feb","Mar","Apr","May","Jun","Jul"].map(m=>`<div style="flex:1;text-align:center;font-size:10.5px;color:var(--muted);">${m}</div>`).join("")}</div>
+    </div>
+    <div class="panel"><h3>Coverage by sub-domain</h3>
+      ${[["Intake & triage",100,"good"],["Investigation controls",95,"good"],["Protection safeguards",88,"teal"],["Reporting & analytics",90,"good"],["Data connectors",78,"amber"]].map(([l,p,t])=>`
+      <div class="hbar-row"><div class="lab">${l}</div><div style="flex:1;"><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:var(--${t});"></div></div></div><div class="val">${p}%</div></div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function pScope(){
+  return `
+  ${statGrid([{label:"Entities in scope",value:"14"},{label:"Processes mapped",value:"6"},{label:"Coverage this cycle",value:"100%",accent:"good"}])}
+  <div class="panel"><h3>Auditable universe</h3>
+  <table><thead><tr><th>Entity / Unit</th><th>Process</th><th>Owner</th><th>Last reviewed</th><th>Status</th></tr></thead><tbody>
+  <tr><td>Group Ethics Office</td><td>Intake &amp; triage</td><td>Chief Compliance Officer</td><td>May 2026</td><td><span class="badge b-good">In scope</span></td></tr>
+  <tr><td>Procurement (all regions)</td><td>Vendor &amp; conflict reports</td><td>CPO</td><td>Jun 2026</td><td><span class="badge b-good">In scope</span></td></tr>
+  <tr><td>HR Shared Services</td><td>Grievance &amp; POSH routing</td><td>CHRO</td><td>Apr 2026</td><td><span class="badge b-good">In scope</span></td></tr>
+  <tr><td>Plant Operations (4 sites)</td><td>Quality &amp; safety reports</td><td>VP Manufacturing</td><td>Mar 2026</td><td><span class="badge b-amber">Due for review</span></td></tr>
+  <tr><td>IT &amp; Data Platform</td><td>Data-misuse reports</td><td>CISO</td><td>Jun 2026</td><td><span class="badge b-good">In scope</span></td></tr>
+  </tbody></table>
+  </div>`;
+}
+
+function pRCM(){
+  return `
+  <div class="panel"><h3>Risk &amp; Control Matrix</h3>
+  <table><thead><tr><th>Risk</th><th>Control</th><th>Assertion</th><th>Owner</th><th>Design</th></tr></thead><tbody>
+  <tr><td>Reporter identity exposed</td><td>Field-level encryption + role-based access matrix</td><td>Confidentiality</td><td>CISO</td><td><span class="badge b-good">Effective</span></td></tr>
+  <tr><td>Conflicted handler assigned</td><td>Automated conflict screen before assignment</td><td>Independence</td><td>Chief Compliance Officer</td><td><span class="badge b-good">Effective</span></td></tr>
+  <tr><td>Case ages past SLA unnoticed</td><td>Ageing monitor with escalation triggers</td><td>Timeliness</td><td>Ethics Office</td><td><span class="badge b-amber">Needs enhancement</span></td></tr>
+  <tr><td>Retaliation against reporter</td><td>Protection register + HR action review</td><td>Reporter safety</td><td>CHRO</td><td><span class="badge b-good">Effective</span></td></tr>
+  <tr><td>Findings not linked to consequence</td><td>Mandatory disciplinary-linkage field on closure</td><td>Completeness</td><td>Chief Compliance Officer</td><td><span class="badge b-good">Effective</span></td></tr>
+  </tbody></table>
+  </div>`;
+}
+
+function pRules(){
+  return `
+  <div class="panel"><h3>Automated rule library</h3>
+  <table><thead><tr><th>Rule</th><th>Trigger</th><th>Threshold</th><th>Status</th></tr></thead><tbody>
+  <tr><td>High-risk keyword auto-flag</td><td>Narrative text scan on intake</td><td>Match on fraud/harassment lexicon</td><td><span class="badge b-good">Active</span></td></tr>
+  <tr><td>SLA breach escalation</td><td>Days open vs. category SLA</td><td>&gt;75% of SLA elapsed</td><td><span class="badge b-good">Active</span></td></tr>
+  <tr><td>Repeat-entity clustering</td><td>Entity + vendor + subject match</td><td>2+ cases in 12 months</td><td><span class="badge b-good">Active</span></td></tr>
+  <tr><td>Retaliation proxy detection</td><td>HR action within 90d of report on same employee</td><td>Any adverse action</td><td><span class="badge b-amber">Pilot</span></td></tr>
+  <tr><td>Anomalous expense CAAT script</td><td>Expense system feed</td><td>&gt;2 std dev from peer group</td><td><span class="badge b-teal">Configuring</span></td></tr>
+  </tbody></table>
+  </div>`;
+}
+
+function pConnectors(){
+  return `
+  <div class="panel"><h3>Connected data sources</h3>
+  <table><thead><tr><th>Source</th><th>Type</th><th>Feeds</th><th>Last sync</th><th>Status</th></tr></thead><tbody>
+  <tr><td>Ethics hotline platform</td><td>API</td><td>Intake channel</td><td>2 min ago</td><td><span class="badge b-good">Connected</span></td></tr>
+  <tr><td>HRIS</td><td>API</td><td>Handler roster, disciplinary linkage</td><td>1 hr ago</td><td><span class="badge b-good">Connected</span></td></tr>
+  <tr><td>Procurement ERP</td><td>Table extract (nightly)</td><td>Vendor cross-reference</td><td>Last night</td><td><span class="badge b-good">Connected</span></td></tr>
+  <tr><td>Expense management system</td><td>API</td><td>Fraud CAAT scripts</td><td>—</td><td><span class="badge b-amber">Setup pending</span></td></tr>
+  <tr><td>Manual case upload (CSV)</td><td>Upload</td><td>Legacy case migration</td><td>Jun 2026</td><td><span class="badge b-muted">Inactive</span></td></tr>
+  </tbody></table>
+  </div>`;
+}
+
+function pSampling(){
+  return `
+  ${statGrid([{label:"Population",value:"142 cases YTD"},{label:"Sample drawn",value:"20"},{label:"Method",value:"Stratified random"}])}
+  <div class="panel"><h3>Sample parameters</h3>
+  <div class="kv"><span class="k">Stratify by</span><span>Category, risk rating, region</span></div>
+  <div class="kv"><span class="k">Confidence level</span><span>95%</span></div>
+  <div class="kv"><span class="k">Judgemental overlay</span><span>All "Founded" high-risk cases included regardless of random draw</span></div>
+  <div class="kv"><span class="k">Sample size</span><span>20 of 142 (14%)</span></div>
+  <div style="margin-top:14px;"><button class="btn btn-seal">Draw new sample</button> <button class="btn btn-ghost">Export population file</button></div>
+  </div>`;
+}
+
+function pExceptions(){
+  return `
+  ${statGrid([{label:"Open exceptions",value:"9",accent:"seal"},{label:"Cleared this month",value:"14",accent:"good"},{label:"False-positive rate",value:"11%"}])}
+  <div class="panel"><h3>Exception queue</h3>
+  <table><thead><tr><th>Case</th><th>Rule triggered</th><th>Raised</th><th>Disposition</th></tr></thead><tbody>
+  <tr><td class="mono">WB-2026-0113</td><td>High-risk keyword auto-flag</td><td>4 days ago</td><td><span class="badge b-amber">Pending review</span></td></tr>
+  <tr><td class="mono">WB-2026-0114</td><td>Repeat-entity clustering</td><td>22 days ago</td><td><span class="badge b-good">Confirmed — linked</span></td></tr>
+  <tr><td class="mono">WB-2026-0107</td><td>SLA breach escalation (approaching)</td><td>2 days ago</td><td><span class="badge b-amber">Pending review</span></td></tr>
+  <tr><td class="mono">WB-2025-0902</td><td>Anomalous expense pattern</td><td>41 days ago</td><td><span class="badge b-muted">False positive</span></td></tr>
+  </tbody></table>
+  </div>`;
+}
+
+function pWorkingPapers(){
+  return `
+  <div class="panel"><h3>Working paper set — WB-2026-0114</h3>
+  <table><thead><tr><th>Item</th><th>Type</th><th>Tick-mark</th><th>Reviewer sign-off</th></tr></thead><tbody>
+  <tr><td>Vendor payment ledger extract</td><td>Evidence (system)</td><td>✓ Ⓐ traced to ERP</td><td><span class="badge b-good">Signed — R. Kapoor</span></td></tr>
+  <tr><td>Interview transcript — Procurement Manager</td><td>Evidence (testimonial)</td><td>✓ Ⓑ corroborated</td><td><span class="badge b-good">Signed — E. Fontaine</span></td></tr>
+  <tr><td>Email thread screenshot</td><td>Evidence (documentary)</td><td>✓ Ⓒ authenticated</td><td><span class="badge b-amber">Pending</span></td></tr>
+  <tr><td>Findings memo — draft v2</td><td>Work product</td><td>—</td><td><span class="badge b-muted">Not yet due</span></td></tr>
+  </tbody></table>
+  <p class="note" style="margin-top:12px;">All evidence is hash-stamped on upload to preserve chain of custody.</p>
+  </div>`;
+}
+
+function pFindings(){
+  return `
+  ${statGrid([{label:"Findings open",value:"3",accent:"amber"},{label:"High grade",value:"1",accent:"seal"},{label:"Closed YTD",value:"11",accent:"good"}])}
+  <div class="panel"><h3>Observation &amp; finding log</h3>
+  <table><thead><tr><th>Finding</th><th>Grade</th><th>Source case</th><th>Owner</th><th>Status</th></tr></thead><tbody>
+  <tr><td>Vendor onboarding lacks conflict-of-interest declaration step</td><td><span class="badge b-seal">High</span></td><td class="mono">WB-2026-0114</td><td>CPO</td><td><span class="badge b-amber">Open</span></td></tr>
+  <tr><td>Overtime approval workflow allows single-approver override</td><td><span class="badge b-amber">Medium</span></td><td class="mono">WB-2026-0111</td><td>CHRO</td><td><span class="badge b-teal">In remediation</span></td></tr>
+  <tr><td>Ageing monitor alert threshold set too high for POSH cases</td><td><span class="badge b-amber">Medium</span></td><td class="mono">WB-2026-0109</td><td>Chief Compliance Officer</td><td><span class="badge b-amber">Open</span></td></tr>
+  </tbody></table>
+  </div>`;
+}
+
+function pRemediation(){
+  return `
+  ${statGrid([{label:"CAPA items open",value:"3"},{label:"Overdue",value:"1",accent:"seal"},{label:"Closed this quarter",value:"7",accent:"good"}])}
+  <div class="panel"><h3>Remediation tracker</h3>
+  <table><thead><tr><th>Action</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody>
+  <tr><td>Add mandatory COI declaration to vendor onboarding</td><td>CPO</td><td>Jul 31, 2026</td><td><span class="badge b-amber">In progress</span></td></tr>
+  <tr><td>Require dual approval on overtime roster changes</td><td>CHRO</td><td>Jun 30, 2026</td><td><span class="badge b-seal">Overdue</span></td></tr>
+  <tr><td>Lower POSH ageing-alert threshold to 50% of SLA</td><td>Chief Compliance Officer</td><td>Aug 15, 2026</td><td><span class="badge b-teal">Not started</span></td></tr>
+  <tr><td>Retest expense CAAT script false-positive rate</td><td>Internal Audit</td><td>Jul 20, 2026</td><td><span class="badge b-good">Re-testing</span></td></tr>
+  </tbody></table>
+  </div>`;
+}
+
+buildNav();
+go(1);
+</script>
+</body>
+</html>
