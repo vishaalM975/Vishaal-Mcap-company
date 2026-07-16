@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integrity Line — Whistleblower &amp; Grievance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#F1F4F6;
+  --panel:#FFFFFF;
+  --ink:#122036;
+  --ink-soft:#334158;
+  --slate:#5B6B82;
+  --line:#DEE4EA;
+  --line-soft:#EAEEF2;
+  --teal:#0F6E63;
+  --teal-deep:#0B554C;
+  --teal-tint:#E4F1EE;
+  --amber:#B9761F;
+  --amber-tint:#FBF0DF;
+  --red:#AE2E23;
+  --red-tint:#FBE9E7;
+  --violet:#5B4E9C;
+  --violet-tint:#EEECF7;
+  --radius:10px;
+  --shadow:0 1px 2px rgba(18,32,54,0.06), 0 8px 24px -12px rgba(18,32,54,0.12);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--canvas);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.serif{font-family:'Fraunces',serif;}
+
+/* ===== Layout ===== */
+.app{display:flex; min-height:100vh;}
+.sidebar{
+  width:272px; flex-shrink:0;
+  background:var(--ink);
+  color:#DCE3EC;
+  display:flex; flex-direction:column;
+  position:sticky; top:0; height:100vh;
+  overflow-y:auto;
+}
+.sidebar::-webkit-scrollbar{width:6px;}
+.sidebar::-webkit-scrollbar-thumb{background:#2A3B58; border-radius:3px;}
+
+.brand{
+  padding:22px 20px 16px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.brand-mark{
+  display:flex; align-items:center; gap:10px;
+}
+.brand-stamp{
+  width:34px; height:34px; border:1.6px solid #6FA69C; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fraunces',serif; font-weight:600; font-size:14px; color:#8FC4B9;
+  transform:rotate(-8deg);
+  flex-shrink:0;
+}
+.brand-name{font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:#F3F6F4; letter-spacing:0.2px;}
+.brand-sub{font-size:11px; color:#8493AC; margin-top:2px; letter-spacing:0.3px;}
+
+.nav-scroll{padding:10px 10px 24px 10px; flex:1;}
+.nav-group-label{
+  font-size:10.5px; text-transform:uppercase; letter-spacing:1.2px;
+  color:#6B7C99; padding:16px 10px 6px 10px; font-weight:600;
+}
+.nav-item{
+  display:flex; align-items:center; gap:10px;
+  padding:8px 10px; border-radius:8px; cursor:pointer;
+  color:#B7C2D6; font-size:13.2px;
+  margin-bottom:1px;
+  border:1px solid transparent;
+}
+.nav-item:hover{background:rgba(255,255,255,0.05); color:#F1F4F8;}
+.nav-item.active{background:rgba(111,166,156,0.14); color:#EFF7F5; border-color:rgba(111,166,156,0.3);}
+.nav-num{
+  font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#5E7089;
+  width:20px; flex-shrink:0;
+}
+.nav-item.active .nav-num{color:#8FC4B9;}
+.nav-type-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.dot-signature{background:#8FC4B9;}
+.dot-shell{background:#8492AF;}
+
+.main{flex:1; min-width:0;}
+.topbar{
+  position:sticky; top:0; z-index:5;
+  background:rgba(241,244,246,0.92); backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+  padding:16px 32px; display:flex; align-items:baseline; justify-content:space-between;
+}
+.topbar-title{font-family:'Fraunces',serif; font-weight:600; font-size:21px; color:var(--ink);}
+.topbar-crumb{font-size:12px; color:var(--slate); margin-top:3px;}
+.topbar-purpose{font-size:12.5px; color:var(--ink-soft); max-width:420px; text-align:right;}
+.content{padding:26px 32px 60px 32px; max-width:1180px;}
+
+/* ===== Common components ===== */
+.stat-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin-bottom:22px;}
+.stat-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:16px 16px 14px 16px; box-shadow:var(--shadow);
+}
+.stat-num{font-family:'Fraunces',serif; font-size:28px; font-weight:600; color:var(--ink); line-height:1;}
+.stat-label{font-size:11.5px; color:var(--slate); margin-top:6px; text-transform:uppercase; letter-spacing:0.5px;}
+.stat-delta{font-size:11px; margin-top:8px; font-weight:600;}
+.up-bad{color:var(--red);} .up-good{color:var(--teal-deep);} .flat{color:var(--slate);}
+
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:22px; overflow:hidden;}
+.panel-head{padding:15px 18px; border-bottom:1px solid var(--line-soft); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+.panel-title{font-weight:600; font-size:14.5px; color:var(--ink);}
+.panel-desc{font-size:12px; color:var(--slate); margin-top:2px;}
+.panel-body{padding:18px;}
+
+table{width:100%; border-collapse:collapse; font-size:13px;}
+th{
+  text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px;
+  color:var(--slate); padding:9px 12px; border-bottom:1px solid var(--line); background:#FAFBFC;
+  white-space:nowrap;
+}
+td{padding:10px 12px; border-bottom:1px solid var(--line-soft); vertical-align:top; color:var(--ink-soft);}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:#FAFBFD;}
+td.id-cell{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink);}
+
+.badge{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 9px; border-radius:20px; font-size:11px; font-weight:600;
+  white-space:nowrap; border:1px solid transparent;
+}
+.b-teal{background:var(--teal-tint); color:var(--teal-deep); border-color:#C7E2DC;}
+.b-amber{background:var(--amber-tint); color:#8A5A16; border-color:#EAD3A6;}
+.b-red{background:var(--red-tint); color:var(--red); border-color:#EFC7C1;}
+.b-violet{background:var(--violet-tint); color:var(--violet); border-color:#D6D0EC;}
+.b-gray{background:#EEF1F4; color:var(--slate); border-color:var(--line);}
+
+.stamp{
+  display:inline-block; padding:2px 10px; border:1.4px solid currentColor; border-radius:4px;
+  font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.6px; text-transform:uppercase;
+  transform:rotate(-2deg); font-weight:600;
+}
+
+.btn{
+  appearance:none; border:1px solid var(--ink); background:var(--ink); color:#fff;
+  padding:8px 14px; border-radius:8px; font-size:12.5px; font-weight:600; cursor:pointer;
+  font-family:inherit;
+}
+.btn:hover{background:#1D2E4A;}
+.btn-ghost{background:transparent; color:var(--ink); border:1px solid var(--line);}
+.btn-ghost:hover{background:#F3F5F7;}
+.btn-teal{background:var(--teal); border-color:var(--teal);}
+.btn-teal:hover{background:var(--teal-deep);}
+.btn-sm{padding:5px 10px; font-size:11.5px; border-radius:6px;}
+
+select, input[type=text], input[type=number], input[type=date], textarea{
+  font-family:inherit; font-size:12.8px; color:var(--ink);
+  border:1px solid var(--line); border-radius:7px; padding:7px 10px; background:#fff;
+  width:100%;
+}
+select:focus, input:focus, textarea:focus{outline:2px solid #B9DCD5; outline-offset:0; border-color:var(--teal);}
+label{font-size:11.5px; font-weight:600; color:var(--ink-soft); display:block; margin-bottom:4px;}
+.field{margin-bottom:13px;}
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:13px;}
+
+.bar-track{width:100%; height:6px; border-radius:4px; background:#EAEEF2; overflow:hidden;}
+.bar-fill{height:100%; border-radius:4px;}
+
+.empty{padding:34px 18px; text-align:center; color:var(--slate); font-size:13px;}
+.empty b{color:var(--ink-soft);}
+
+.kanban{display:grid; grid-template-columns:repeat(5,1fr); gap:12px;}
+.kcol{background:#F7F8FA; border:1px solid var(--line); border-radius:10px; padding:10px;}
+.kcol-head{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:var(--slate); margin-bottom:9px; display:flex; justify-content:space-between;}
+.kcard{background:#fff; border:1px solid var(--line); border-radius:8px; padding:9px 10px; margin-bottom:8px; box-shadow:0 1px 2px rgba(18,32,54,0.05);}
+.kcard-id{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--teal-deep); font-weight:600;}
+.kcard-title{font-size:12px; margin-top:3px; color:var(--ink);}
+.kcard-meta{font-size:10.5px; color:var(--slate); margin-top:6px;}
+
+.timeline{position:relative; padding-left:20px;}
+.timeline::before{content:'';position:absolute; left:5px; top:4px; bottom:4px; width:1.5px; background:var(--line);}
+.tl-item{position:relative; padding-bottom:18px;}
+.tl-dot{position:absolute; left:-20px; top:3px; width:9px; height:9px; border-radius:50%; background:var(--teal); border:2px solid #fff; box-shadow:0 0 0 1px var(--teal);}
+.tl-when{font-size:10.5px; color:var(--slate); font-family:'IBM Plex Mono',monospace;}
+.tl-what{font-size:12.8px; color:var(--ink-soft); margin-top:2px;}
+
+.toast{
+  position:fixed; bottom:22px; right:22px; background:var(--ink); color:#fff;
+  padding:11px 18px; border-radius:8px; font-size:12.8px; box-shadow:var(--shadow);
+  opacity:0; transform:translateY(8px); transition:all .25s ease; pointer-events:none; z-index:50;
+}
+.toast.show{opacity:1; transform:translateY(0);}
+
+.modal-backdrop{position:fixed; inset:0; background:rgba(18,32,54,0.45); display:none; align-items:flex-start; justify-content:center; padding:6vh 20px; z-index:40; overflow-y:auto;}
+.modal-backdrop.show{display:flex;}
+.modal{background:#fff; border-radius:12px; width:100%; max-width:560px; box-shadow:0 24px 60px rgba(18,32,54,0.3); overflow:hidden;}
+.modal-head{padding:16px 20px; border-bottom:1px solid var(--line-soft); display:flex; justify-content:space-between; align-items:center;}
+.modal-title{font-weight:700; font-size:15px; font-family:'Fraunces',serif;}
+.modal-body{padding:18px 20px; max-height:64vh; overflow-y:auto;}
+.modal-foot{padding:14px 20px; border-top:1px solid var(--line-soft); display:flex; justify-content:flex-end; gap:8px;}
+.x-close{cursor:pointer; color:var(--slate); font-size:18px; line-height:1; background:none; border:none;}
+
+.pill-nav{display:flex; gap:6px; flex-wrap:wrap;}
+.pill{padding:5px 11px; border-radius:20px; font-size:11.5px; border:1px solid var(--line); color:var(--slate); cursor:pointer; background:#fff;}
+.pill.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+.foot-note{font-size:11px; color:#8493AC; margin-top:26px; text-align:center; padding-bottom:10px;}
+
+@media (max-width:900px){
+  .sidebar{position:fixed; left:-272px; z-index:30; transition:left .2s;}
+  .sidebar.open{left:0;}
+  .content{padding:20px 16px 50px;}
+  .topbar{padding:14px 16px;}
+  .form-grid{grid-template-columns:1fr;}
+  .kanban{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="toast" id="toast"></div>
+<div class="modal-backdrop" id="modalBackdrop"><div class="modal" id="modal"></div></div>
+<script>
+/* =========================================================================
+   INTEGRITY LINE — Whistleblower & Grievance Module
+   In-memory data store (no localStorage, per artifact constraints)
+   ========================================================================= */
+
+const PAGES = [
+  {sec:'signature', mod:1, key:'intake', name:'Anonymous Intake Channel', purpose:'Multi-mode confidential reporting'},
+  {sec:'signature', mod:2, key:'triage', name:'Case Triage & Categorisation', purpose:'Classify and prioritise'},
+  {sec:'signature', mod:3, key:'assignment', name:'Conflict-Free Assignment', purpose:'Independent handler allocation'},
+  {sec:'signature', mod:4, key:'investigation', name:'Investigation Tracking', purpose:'Manage each complaint to closure'},
+  {sec:'signature', mod:5, key:'protection', name:'Whistleblower Protection', purpose:'Anti-retaliation safeguards'},
+  {sec:'signature', mod:6, key:'sla', name:'SLA & Ageing Monitor', purpose:'Timeliness of resolution'},
+  {sec:'signature', mod:7, key:'substantiation', name:'Substantiation Outcome', purpose:'Founded / unfounded disposition'},
+  {sec:'signature', mod:8, key:'disciplinary', name:'Disciplinary Action Linkage', purpose:'Consequence management'},
+  {sec:'signature', mod:9, key:'trends', name:'Trend & Hotspot Analytics', purpose:'Recurring issue areas'},
+  {sec:'signature', mod:10, key:'board', name:'Committee / Board Reporting', purpose:'Governance-level summaries'},
+  {sec:'signature', mod:11, key:'confidentiality', name:'Confidentiality Controls', purpose:'Access-restricted case data'},
+  {sec:'signature', mod:12, key:'feedback', name:'Feedback to Complainant', purpose:'Closure communication'},
+  {sec:'signature', mod:13, key:'repeat', name:'Repeat-Complaint Linkage', purpose:'Connect related cases'},
+  {sec:'signature', mod:14, key:'posh', name:'POSH / HR Grievance Split', purpose:'Route to correct forum'},
+  {sec:'signature', mod:15, key:'survey', name:'Ethics-Culture Survey', purpose:'Speak-up climate measurement'},
+  {sec:'shell', mod:16, key:'dashboard', name:'Module Dashboard & KPIs', purpose:'Live risk score, open exceptions, coverage % and trend'},
+  {sec:'shell', mod:17, key:'scope', name:'Scope & Audit Universe', purpose:'Auditable units / entities / processes in scope'},
+  {sec:'shell', mod:18, key:'rcm', name:'Risk & Control Matrix', purpose:'Risks, controls, assertions and control owners'},
+  {sec:'shell', mod:19, key:'rules', name:'Test & Analytics Rule Library', purpose:'Automated red-flag rules, thresholds, CAAT scripts'},
+  {sec:'shell', mod:20, key:'connectors', name:'Data Source & Connector Setup', purpose:'ERP tables / APIs / uploads feeding analytics'},
+  {sec:'shell', mod:21, key:'sampling', name:'Sampling & Population Builder', purpose:'Draw statistical or judgemental samples'},
+  {sec:'shell', mod:22, key:'exceptions', name:'Exception & Red-Flag Queue', purpose:'Triage system-generated exceptions'},
+  {sec:'shell', mod:23, key:'workpapers', name:'Working Papers & Evidence', purpose:'Evidence, tick-marks, reviewer sign-off'},
+  {sec:'shell', mod:24, key:'findings', name:'Observation & Finding Log', purpose:'Raise, grade and route findings'},
+  {sec:'shell', mod:25, key:'remediation', name:'Remediation / Action Tracker', purpose:'CAPA items, owners, due dates, re-testing'}
+];
+
+const CATEGORIES = ['Financial Fraud','Corruption / Bribery','Conflict of Interest','Data Privacy Breach','Workplace Harassment','Discrimination','H&S Violation','Procurement Irregularity','Code of Conduct','Retaliation'];
+const DEPARTMENTS = ['Finance','Procurement','Sales & Marketing','Operations','Human Resources','IT & Security','Supply Chain','Legal & Compliance','Manufacturing'];
+const ENTITIES = ['Corporate HQ','Plant — Chennai','Plant — Pune','APAC Regional Office','EMEA Regional Office','Shared Services Center','Distribution Hub — North'];
+
+let SEQ = 1042;
+function nextCaseId(){ SEQ++; return 'WB-2026-'+String(SEQ).padStart(4,'0'); }
+function uid(prefix){ return prefix+'-'+Math.random().toString(36).slice(2,7).toUpperCase(); }
+function fmtDate(d){ const dt=(d instanceof Date)?d:new Date(d); return dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function daysAgo(n){ const d=new Date(); d.setDate(d.getDate()-n); return d; }
+function daysBetween(a,b){ return Math.round((b-a)/86400000); }
+
+/* ---- Seed data: Cases (drives Intake, Triage, Assignment, Investigation, SLA, Substantiation, Disciplinary, Trends, Repeat, POSH) ---- */
+const STAGES = ['Intake','Triage','Investigation','Review','Closed'];
+const HANDLERS = ['A. Krishnan (Ethics Office)','S. Fernandes (Internal Audit)','R. Mehta (HR Compliance)','L. D\'Souza (Legal)','N. Iyer (Independent Counsel)'];
+
+const CASES = [
+  {id:'WB-2026-0871', channel:'Web Form', anon:true, category:'Financial Fraud', dept:'Finance', entity:'Corporate HQ', stage:'Investigation', severity:'Critical', handler:'S. Fernandes (Internal Audit)', opened:daysAgo(38), sla:30, outcome:null, retaliationRisk:'Medium', forum:'Ethics', desc:'Alleged manipulation of vendor invoices to inflate quarterly spend.', related:['WB-2026-0790']},
+  {id:'WB-2026-0902', channel:'Hotline (Call)', anon:true, category:'Workplace Harassment', dept:'Sales & Marketing', entity:'APAC Regional Office', stage:'Review', severity:'High', handler:'R. Mehta (HR Compliance)', opened:daysAgo(24), sla:21, outcome:'Substantiated', retaliationRisk:'High', forum:'POSH Committee', desc:'Complaint of persistent inappropriate remarks by a reporting manager.', related:[]},
+  {id:'WB-2026-0918', channel:'Mobile App', anon:false, category:'Conflict of Interest', dept:'Procurement', entity:'Plant — Chennai', stage:'Triage', severity:'Medium', handler:null, opened:daysAgo(6), sla:30, outcome:null, retaliationRisk:'Low', forum:null, desc:'Employee flags undisclosed family relationship with an approved vendor.', related:[]},
+  {id:'WB-2026-0790', channel:'Email', anon:true, category:'Financial Fraud', dept:'Finance', entity:'Corporate HQ', stage:'Closed', severity:'Critical', handler:'S. Fernandes (Internal Audit)', opened:daysAgo(112), sla:30, outcome:'Substantiated', retaliationRisk:'Low', forum:'Ethics', desc:'Earlier-cycle report of duplicate payments to a shell vendor account.', related:['WB-2026-0871']},
+  {id:'WB-2026-0925', channel:'Web Form', anon:true, category:'Data Privacy Breach', dept:'IT & Security', entity:'Shared Services Center', stage:'Investigation', severity:'High', handler:'L. D\'Souza (Legal)', opened:daysAgo(17), sla:21, outcome:null, retaliationRisk:'Low', forum:'Ethics', desc:'Customer PII allegedly exported to a personal drive by a contractor.', related:[]},
+  {id:'WB-2026-0931', channel:'Walk-in', anon:false, category:'Discrimination', dept:'Human Resources', entity:'Corporate HQ', stage:'Intake', severity:'Medium', handler:null, opened:daysAgo(2), sla:30, outcome:null, retaliationRisk:'Low', forum:null, desc:'Concern raised over promotion criteria applied inconsistently across a team.', related:[]},
+  {id:'WB-2026-0860', channel:'Hotline (Call)', anon:true, category:'H&S Violation', dept:'Manufacturing', entity:'Plant — Pune', stage:'Closed', severity:'High', handler:'N. Iyer (Independent Counsel)', opened:daysAgo(95), sla:21, outcome:'Partially Substantiated', retaliationRisk:'Low', forum:'Ethics', desc:'Safety guard bypass reported on a stamping line, night shift.', related:[]},
+  {id:'WB-2026-0888', channel:'Web Form', anon:true, category:'Corruption / Bribery', dept:'Supply Chain', entity:'Distribution Hub — North', stage:'Review', severity:'Critical', handler:'A. Krishnan (Ethics Office)', opened:daysAgo(29), sla:30, outcome:null, retaliationRisk:'Medium', forum:'Ethics', desc:'Alleged kickback arrangement with a freight-forwarding partner.', related:[]},
+  {id:'WB-2026-0940', channel:'Email', anon:false, category:'Code of Conduct', dept:'Sales & Marketing', entity:'EMEA Regional Office', stage:'Triage', severity:'Low', handler:null, opened:daysAgo(4), sla:30, outcome:null, retaliationRisk:'Low', forum:null, desc:'Expense claims for client entertainment appear to exceed policy limits.', related:[]},
+  {id:'WB-2026-0812', channel:'Web Form', anon:true, category:'Retaliation', dept:'Finance', entity:'Corporate HQ', stage:'Closed', severity:'High', handler:'L. D\'Souza (Legal)', opened:daysAgo(80), sla:21, outcome:'Unsubstantiated', retaliationRisk:'Medium', forum:'Ethics', desc:'Complainant from WB-2026-0790 alleges reduced responsibilities post-report.', related:['WB-2026-0790']},
+  {id:'WB-2026-0899', channel:'Mobile App', anon:true, category:'Procurement Irregularity', dept:'Procurement', entity:'Plant — Chennai', stage:'Investigation', severity:'Medium', handler:'S. Fernandes (Internal Audit)', opened:daysAgo(21), sla:30, outcome:null, retaliationRisk:'Low', forum:'Ethics', desc:'Split purchase orders suspected to avoid approval thresholds.', related:[]},
+  {id:'WB-2026-0945', channel:'Hotline (Call)', anon:false, category:'Workplace Harassment', dept:'Operations', entity:'Plant — Pune', stage:'Intake', severity:'High', handler:null, opened:daysAgo(1), sla:21, outcome:null, retaliationRisk:'Medium', forum:null, desc:'Verbal intimidation reported between two shift supervisors.', related:[]}
+];
+
+CASES.forEach(c=>{ c.age = daysBetween(c.opened, new Date()); c.overdue = c.stage!=='Closed' && c.age > c.sla; });
+
+/* ---- Access / confidentiality log ---- */
+const ACCESS_LOG = [
+  {who:'S. Fernandes (Internal Audit)', case:'WB-2026-0871', action:'Viewed case file', when:daysAgo(0)},
+  {who:'A. Krishnan (Ethics Office)', case:'WB-2026-0888', action:'Added investigator note', when:daysAgo(1)},
+  {who:'R. Mehta (HR Compliance)', case:'WB-2026-0902', action:'Downloaded evidence bundle', when:daysAgo(1)},
+  {who:'System', case:'WB-2026-0918', action:'Auto-restricted: pending conflict check', when:daysAgo(2)},
+  {who:'L. D\'Souza (Legal)', case:'WB-2026-0925', action:'Granted view access to N. Iyer', when:daysAgo(3)},
+  {who:'N. Iyer (Independent Counsel)', case:'WB-2026-0860', action:'Closed case, archived file', when:daysAgo(9)}
+];
+
+/* ---- Feedback / closure communications ---- */
+const FEEDBACK_LOG = {
+  'WB-2026-0790':[
+    {when:daysAgo(100),what:'Acknowledgement sent to complainant via secure inbox.'},
+    {when:daysAgo(60),what:'Interim update: investigation ongoing, no timeline change.'},
+    {when:daysAgo(15),what:'Outcome notice sent: allegation substantiated, corrective action taken.'}
+  ],
+  'WB-2026-0860':[
+    {when:daysAgo(90),what:'Acknowledgement sent to complainant via secure inbox.'},
+    {when:daysAgo(20),what:'Outcome notice sent: partially substantiated, safety control reinforced.'}
+  ],
+  'WB-2026-0812':[
+    {when:daysAgo(75),what:'Acknowledgement sent to complainant via secure inbox.'},
+    {when:daysAgo(10),what:'Outcome notice sent: allegation unsubstantiated after review.'}
+  ]
+};
+
+/* ---- Disciplinary actions ---- */
+const DISCIPLINARY = [
+  {id:uid('DA'), case:'WB-2026-0790', employee:'Vendor Mgmt Lead (Finance)', action:'Termination for cause', status:'Completed', date:daysAgo(12)},
+  {id:uid('DA'), case:'WB-2026-0860', employee:'Shift Supervisor (Plant — Pune)', action:'Written warning + retraining', status:'Completed', date:daysAgo(18)},
+  {id:uid('DA'), case:'WB-2026-0902', employee:'Reporting Manager (Sales)', action:'Suspension pending HR review', status:'In progress', date:daysAgo(5)}
+];
+
+/* ---- Ethics survey ---- */
+const SURVEYS = [
+  {name:'Annual Speak-Up Climate Survey 2026', period:'Q2 2026', responses:1284, eligible:1610, comfortReporting:71, awarenessOfChannel:88, fearOfRetaliation:19, status:'Closed'},
+  {name:'New-Hire Ethics Orientation Pulse', period:'Q2 2026', responses:212, eligible:240, comfortReporting:64, awarenessOfChannel:95, fearOfRetaliation:14, status:'Closed'},
+  {name:'Post-Case Trust Check-in — Finance', period:'Q3 2026', responses:58, eligible:140, comfortReporting:0, awarenessOfChannel:0, fearOfRetaliation:0, status:'Open'}
+];
+
+/* ---- Board reporting ---- */
+const BOARD_REPORTS = [
+  {period:'Q1 2026', preparedBy:'Chief Ethics Officer', presentedTo:'Audit & Risk Committee', date:daysAgo(105), summary:'11 new cases, 3 substantiated, 0 material exposures, retaliation program on track.'},
+  {period:'FY2025 Annual', preparedBy:'Chief Ethics Officer', presentedTo:'Board of Directors', date:daysAgo(200), summary:'44 cases handled, avg. 27-day resolution, 2 disciplinary terminations, no regulatory referrals.'}
+];
+
+/* ---- Shell pages seed data ---- */
+const SCOPE_UNITS = [
+  {entity:'Corporate HQ', process:'Whistleblower Intake & Case Mgmt', owner:'Chief Ethics Officer', riskRating:'High', lastReviewed:daysAgo(40)},
+  {entity:'Plant — Chennai', process:'Procurement Escalations', owner:'Plant Compliance Lead', riskRating:'Medium', lastReviewed:daysAgo(70)},
+  {entity:'Plant — Pune', process:'H&S Grievance Handling', owner:'Plant Compliance Lead', riskRating:'High', lastReviewed:daysAgo(55)},
+  {entity:'APAC Regional Office', process:'POSH Committee Referrals', owner:'Regional HR Director', riskRating:'Medium', lastReviewed:daysAgo(30)},
+  {entity:'Shared Services Center', process:'Data Privacy Complaints', owner:'DPO', riskRating:'High', lastReviewed:daysAgo(15)},
+  {entity:'EMEA Regional Office', process:'Code of Conduct Escalations', owner:'Regional Compliance Lead', riskRating:'Low', lastReviewed:daysAgo(90)}
+];
+
+const RCM = [
+  {risk:'Case suppressed or under-recorded', control:'System-generated case ID on every intake channel; monthly reconciliation', assertion:'Completeness', owner:'Chief Ethics Officer', design:'Effective', operating:'Effective'},
+  {risk:'Conflicted handler assigned', control:'Automated conflict-check questionnaire before assignment', assertion:'Existence', owner:'Ethics Office', design:'Effective', operating:'Needs Improvement'},
+  {risk:'Retaliation against complainant', control:'Retaliation-risk flag with HRBP monitoring for 12 months', assertion:'Existence', owner:'HR Compliance', design:'Effective', operating:'Effective'},
+  {risk:'Confidential data disclosed', control:'Role-based access with case-level restriction and audit log', assertion:'Rights & Obligations', owner:'IT Security', design:'Effective', operating:'Effective'},
+  {risk:'SLA breach unnoticed', control:'Automated ageing alerts at 75% and 100% of SLA', assertion:'Timeliness', owner:'Internal Audit', design:'Effective', operating:'Partially Effective'},
+  {risk:'Disciplinary action not linked to case outcome', control:'Mandatory linkage field before case closure', assertion:'Completeness', owner:'HR Compliance', design:'Needs Improvement', operating:'Not Tested'}
+];
+
+const RULES = [
+  {name:'Duplicate Vendor Bank Account', script:'CAAT-VEN-014', threshold:'Match ≥ 2 fields across active vendors', frequency:'Daily', active:true},
+  {name:'Split PO Below Approval Limit', script:'CAAT-PRC-022', threshold:'2+ POs, same vendor, 5 days, sum > limit', frequency:'Daily', active:true},
+  {name:'Case Open > SLA with No Update', script:'CAAT-WB-003', threshold:'No status change in 10 days past SLA', frequency:'Daily', active:true},
+  {name:'Complainant Identity Access Outside Case Team', script:'CAAT-WB-007', threshold:'Access by user not on case roster', frequency:'Real-time', active:true},
+  {name:'Repeat Subject — 3 Cases in 12 Months', script:'CAAT-WB-011', threshold:'Same named subject across ≥3 cases', frequency:'Weekly', active:false}
+];
+
+const CONNECTORS = [
+  {name:'HR Information System', type:'API', feeds:'Employee master, org hierarchy, HRBP mapping', status:'Connected', lastSync:daysAgo(0)},
+  {name:'Finance ERP — AP Module', type:'Table extract', feeds:'Vendor master, payment register', status:'Connected', lastSync:daysAgo(1)},
+  {name:'Procurement System', type:'API', feeds:'Purchase orders, approval workflow log', status:'Connected', lastSync:daysAgo(1)},
+  {name:'Case Management (Intake Channels)', type:'Native', feeds:'Web form, hotline transcript, mobile app, email', status:'Connected', lastSync:daysAgo(0)},
+  {name:'Directory / Access Control', type:'API', feeds:'User roles, access grants', status:'Connected', lastSync:daysAgo(0)},
+  {name:'Legacy Regional HRMS (APAC)', type:'File upload', feeds:'Regional employee roster', status:'Attention needed', lastSync:daysAgo(14)}
+];
+
+const SAMPLES = [
+  {name:'Closed Cases FY2025 — Resolution Timeliness', population:44, method:'Statistical (95% CI, 5% precision)', sampleSize:32, drawnOn:daysAgo(60)},
+  {name:'Finance-Category Cases — Disciplinary Linkage Check', population:9, method:'Judgemental — full population', sampleSize:9, drawnOn:daysAgo(12)},
+  {name:'High-Severity Open Cases — SLA Adherence', population:5, method:'Judgemental — full population', sampleSize:5, drawnOn:daysAgo(2)}
+];
+
+const EXCEPTIONS = [
+  {id:uid('EX'), rule:'Case Open > SLA with No Update', ref:'WB-2026-0871', detail:'8 days past SLA, no status change logged', disposition:'Under review', flaggedOn:daysAgo(3)},
+  {id:uid('EX'), rule:'Split PO Below Approval Limit', ref:'PO-88213 / PO-88219', detail:'Same vendor, 3-day gap, combined value exceeds plant limit', disposition:'Escalated to WB-2026-0899', flaggedOn:daysAgo(9)},
+  {id:uid('EX'), rule:'Complainant Identity Access Outside Case Team', ref:'WB-2026-0918', detail:'Access attempt by user outside assigned roster', disposition:'False positive — cleared', flaggedOn:daysAgo(5)},
+  {id:uid('EX'), rule:'Repeat Subject — 3 Cases in 12 Months', ref:'Finance — Vendor Mgmt Lead', detail:'Subject named in 2 cases within 12 months (threshold 3)', disposition:'Monitoring', flaggedOn:daysAgo(20)}
+];
+
+const WORKPAPERS = [
+  {ref:'WP-0871-01', case:'WB-2026-0871', title:'Invoice sample tie-out to GL', preparer:'S. Fernandes', reviewer:'A. Krishnan', signOff:'Pending', updated:daysAgo(2)},
+  {ref:'WP-0888-01', case:'WB-2026-0888', title:'Freight vendor payment trace', preparer:'A. Krishnan', reviewer:'L. D\'Souza', signOff:'Signed off', updated:daysAgo(6)},
+  {ref:'WP-0925-01', case:'WB-2026-0925', title:'Data export log extraction', preparer:'L. D\'Souza', reviewer:'N. Iyer', signOff:'Signed off', updated:daysAgo(10)},
+  {ref:'WP-0790-03', case:'WB-2026-0790', title:'Closure memo & evidence index', preparer:'S. Fernandes', reviewer:'Chief Ethics Officer', signOff:'Signed off', updated:daysAgo(14)}
+];
+
+const FINDINGS = [
+  {id:uid('FN'), case:'WB-2026-0790', title:'Duplicate payments routed to shell vendor', grade:'Critical', route:'Legal + Finance Controller', status:'Closed', raised:daysAgo(90)},
+  {id:uid('FN'), case:'WB-2026-0860', title:'Machine guard interlock bypassed on Line 4', grade:'High', route:'Plant EHS Head', status:'Remediated', raised:daysAgo(88)},
+  {id:uid('FN'), case:'WB-2026-0888', title:'Undisclosed payment terms with freight partner', grade:'High', route:'Procurement Director', status:'In remediation', raised:daysAgo(22)},
+  {id:uid('FN'), case:'WB-2026-0899', title:'PO splitting pattern confirmed for 2 of 6 orders', grade:'Medium', route:'Procurement Director', status:'Open', raised:daysAgo(14)}
+];
+
+const REMEDIATION = [
+  {id:uid('CAPA'), finding:'Duplicate payments routed to shell vendor', owner:'Finance Controller', action:'Implement 3-way match hard-block for new vendors', due:daysAgo(-5), status:'Completed'},
+  {id:uid('CAPA'), finding:'Machine guard interlock bypassed on Line 4', owner:'Plant EHS Head', action:'Retrofit tamper-alarm on all interlocks, retrain shift leads', due:daysAgo(-20), status:'Completed'},
+  {id:uid('CAPA'), finding:'Undisclosed payment terms with freight partner', owner:'Procurement Director', action:'Re-tender freight contract with disclosure clause', due:daysAgo(-40), status:'In progress'},
+  {id:uid('CAPA'), finding:'PO splitting pattern confirmed for 2 of 6 orders', owner:'Procurement Director', action:'System control to flag same-vendor POs within 7 days', due:daysAgo(-60), status:'Not started'}
+];
+
+let state = { route:'dashboard', toastTimer:null };
+/* ============================= helpers ============================= */
+function el(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content.firstElementChild; }
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(state.toastTimer);
+  state.toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+}
+function closeModal(){ document.getElementById('modalBackdrop').classList.remove('show'); document.getElementById('modal').innerHTML=''; }
+function openModal(titleHtml, bodyHtml, footHtml){
+  document.getElementById('modal').innerHTML =
+    '<div class="modal-head"><div class="modal-title">'+titleHtml+'</div><button class="x-close" onclick="closeModal()">&times;</button></div>'+
+    '<div class="modal-body">'+bodyHtml+'</div>'+
+    (footHtml?('<div class="modal-foot">'+footHtml+'</div>'):'');
+  document.getElementById('modalBackdrop').classList.add('show');
+}
+document.getElementById('modalBackdrop').addEventListener('click',e=>{ if(e.target.id==='modalBackdrop') closeModal(); });
+
+function severityBadge(sev){
+  const map={Critical:'b-red',High:'b-amber',Medium:'b-violet',Low:'b-gray'};
+  return '<span class="badge '+(map[sev]||'b-gray')+'">'+sev+'</span>';
+}
+function stageBadge(stage){
+  const map={Intake:'b-gray',Triage:'b-violet',Investigation:'b-amber',Review:'b-teal',Closed:'b-teal'};
+  return '<span class="badge '+(map[stage]||'b-gray')+'">'+stage+'</span>';
+}
+function outcomeBadge(o){
+  if(!o) return '<span class="badge b-gray">Pending</span>';
+  const map={'Substantiated':'b-red','Partially Substantiated':'b-amber','Unsubstantiated':'b-teal','Inconclusive':'b-gray'};
+  return '<span class="badge '+(map[o]||'b-gray')+'">'+o+'</span>';
+}
+function riskBadge(r){
+  const map={High:'b-red',Medium:'b-amber',Low:'b-teal'};
+  return '<span class="badge '+(map[r]||'b-gray')+'">'+r+'</span>';
+}
+function statusBadge(s){
+  const map={'Completed':'b-teal','In progress':'b-amber','Not started':'b-gray','Signed off':'b-teal','Pending':'b-amber',
+    'Connected':'b-teal','Attention needed':'b-amber','Open':'b-amber','Closed':'b-teal','Remediated':'b-teal','In remediation':'b-amber',
+    'Under review':'b-amber','Escalated to WB-2026-0899':'b-violet','False positive — cleared':'b-gray','Monitoring':'b-violet'};
+  return '<span class="badge '+(map[s]||'b-gray')+'">'+s+'</span>';
+}
+function caseByStage(stage){ return CASES.filter(c=>c.stage===stage); }
+function findCase(id){ return CASES.find(c=>c.id===id); }
+
+/* ============================= sidebar / topbar / router ============================= */
+function render(){
+  const app = document.getElementById('app');
+  const page = PAGES.find(p=>p.key===state.route) || PAGES[15];
+  app.innerHTML = '';
+  app.appendChild(renderSidebar(page));
+  app.appendChild(renderMain(page));
+  window.scrollTo(0,0);
+}
+function go(route){ state.route=route; render(); }
+
+function renderSidebar(active){
+  const wrap = el('<div class="sidebar" id="sidebarEl"></div>');
+  wrap.appendChild(el(
+    '<div class="brand"><div class="brand-mark"><div class="brand-stamp">IL</div>'+
+    '<div><div class="brand-name">Integrity Line</div><div class="brand-sub">Whistleblower &amp; Grievance</div></div></div></div>'
+  ));
+  const nav = el('<div class="nav-scroll"></div>');
+  nav.appendChild(el('<div class="nav-group-label">Signature — Case Workflow</div>'));
+  PAGES.filter(p=>p.sec==='signature').forEach(p=>nav.appendChild(navItem(p,active)));
+  nav.appendChild(el('<div class="nav-group-label">Shell — Audit Infrastructure</div>'));
+  PAGES.filter(p=>p.sec==='shell').forEach(p=>nav.appendChild(navItem(p,active)));
+  wrap.appendChild(nav);
+  return wrap;
+}
+function navItem(p, active){
+  const item = el(
+    '<div class="nav-item'+(p.key===active.key?' active':'')+'">'+
+      '<span class="nav-num">'+String(p.mod).padStart(2,'0')+'</span>'+
+      '<span class="nav-type-dot dot-'+p.sec+'"></span>'+
+      '<span>'+p.name+'</span>'+
+    '</div>'
+  );
+  item.addEventListener('click',()=>go(p.key));
+  return item;
+}
+function renderMain(page){
+  const main = el('<div class="main"></div>');
+  main.appendChild(el(
+    '<div class="topbar"><div><div class="topbar-title">'+page.name+'</div>'+
+    '<div class="topbar-crumb">Module 58 · Whistleblower &amp; Grievance · Governance &amp; Audit Mgmt · Sub '+page.mod+' · '+(page.sec==='signature'?'Signature':'Shell')+'</div></div>'+
+    '<div class="topbar-purpose">'+page.purpose+'</div></div>'
+  ));
+  const content = el('<div class="content"></div>');
+  content.appendChild(RENDERERS[page.key] ? RENDERERS[page.key]() : el('<div class="empty">Page under construction.</div>'));
+  content.appendChild(el('<div class="foot-note">Integrity Line — Governance &amp; Audit Mgmt suite · All data shown is illustrative demo data, held in-session only.</div>'));
+  main.appendChild(content);
+  return main;
+}
+/* ============================= RENDERERS ============================= */
+const RENDERERS = {};
+
+/* ---------- 16. Dashboard (Shell) — numeric KPI cards only, no charts ---------- */
+RENDERERS.dashboard = function(){
+  const open = CASES.filter(c=>c.stage!=='Closed');
+  const overdue = CASES.filter(c=>c.overdue);
+  const closed = CASES.filter(c=>c.stage==='Closed');
+  const avgTAT = Math.round(closed.reduce((s,c)=>s+c.age,0)/(closed.length||1));
+  const substantiated = closed.filter(c=>c.outcome==='Substantiated'||c.outcome==='Partially Substantiated').length;
+  const subRate = closed.length? Math.round(substantiated/closed.length*100):0;
+  const coverage = Math.round(SCOPE_UNITS.length/ENTITIES.length*100);
+  const critOpen = open.filter(c=>c.severity==='Critical').length;
+  const riskScore = Math.min(100, Math.round(critOpen*14 + overdue.length*9 + open.length*2));
+
+  const wrap = el('<div></div>');
+  wrap.appendChild(el(
+    '<div class="stat-grid">'+
+      statCard('Composite Risk Score', riskScore+' / 100', riskScore>55?'up-bad':(riskScore>30?'flat':'up-good'), riskScore>55?'Elevated — driven by open critical cases':'Within tolerance')+
+      statCard('Open Cases', open.length, 'flat', overdue.length+' currently past SLA')+
+      statCard('Overdue (Past SLA)', overdue.length, overdue.length>0?'up-bad':'up-good', overdue.length>0?'Requires escalation':'None outstanding')+
+      statCard('Avg. Time to Close', avgTAT+' days', avgTAT>30?'up-bad':'up-good', 'Across '+closed.length+' closed cases')+
+      statCard('Substantiation Rate', subRate+'%', 'flat', substantiated+' of '+closed.length+' closed cases founded')+
+      statCard('Audit Universe Coverage', coverage+'%', coverage>=80?'up-good':'flat', SCOPE_UNITS.length+' of '+ENTITIES.length+' entities scoped')+
+    '</div>'
+  ));
+
+  const byStagePanel = el('<div class="panel"></div>');
+  byStagePanel.appendChild(el('<div class="panel-head"><div><div class="panel-title">Caseload by Stage</div><div class="panel-desc">Distribution of all cases currently in the pipeline</div></div></div>'));
+  const pbody = el('<div class="panel-body"></div>');
+  STAGES.forEach(st=>{
+    const n = caseByStage(st).length;
+    const pct = Math.round(n/CASES.length*100);
+    pbody.appendChild(el(
+      '<div style="margin-bottom:12px;">'+
+        '<div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:5px;"><span style="font-weight:600;">'+st+'</span><span style="color:var(--slate);">'+n+' cases · '+pct+'%</span></div>'+
+        '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%; background:'+stageColor(st)+';"></div></div>'+
+      '</div>'
+    ));
+  });
+  byStagePanel.appendChild(pbody);
+  wrap.appendChild(byStagePanel);
+
+  const openTablePanel = panelTable('Open Cases Requiring Attention','Sorted by severity, most urgent first',
+    ['Case ID','Category','Department','Stage','Severity','Age / SLA','Handler'],
+    open.sort((a,b)=>sevRank(b.severity)-sevRank(a.severity)).map(c=>[
+      '<span class="id-cell">'+c.id+'</span>', c.category, c.dept, stageBadge(c.stage), severityBadge(c.severity),
+      '<span class="'+(c.overdue?'mono':'mono')+'" style="color:'+(c.overdue?'var(--red)':'var(--ink-soft)')+';">'+c.age+'d / '+c.sla+'d'+(c.overdue?' ⚠':'')+'</span>',
+      c.handler||'<span style="color:var(--slate);">Unassigned</span>'
+    ])
+  );
+  wrap.appendChild(openTablePanel);
+  return wrap;
+};
+function sevRank(s){ return {Critical:4,High:3,Medium:2,Low:1}[s]||0; }
+function stageColor(st){ return {Intake:'#9AA7BD',Triage:'#8C7FC2',Investigation:'#C99A4A',Review:'#3F9C8E',Closed:'#0F6E63'}[st]; }
+function statCard(label,num,cls,delta){
+  return '<div class="stat-card"><div class="stat-num">'+num+'</div><div class="stat-label">'+label+'</div><div class="stat-delta '+cls+'">'+delta+'</div></div>';
+}
+function panelTable(title,desc,headers,rows,emptyMsg){
+  const p = el('<div class="panel"></div>');
+  p.appendChild(el('<div class="panel-head"><div><div class="panel-title">'+title+'</div>'+(desc?'<div class="panel-desc">'+desc+'</div>':'')+'</div></div>'));
+  if(!rows.length){ p.appendChild(el('<div class="empty">'+(emptyMsg||'No records yet.')+'</div>')); return p; }
+  const body = el('<div class="panel-body" style="padding:0; overflow-x:auto;"></div>');
+  let html = '<table><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>';
+  rows.forEach(r=>{ html += '<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>'; });
+  html += '</tbody></table>';
+  body.innerHTML = html;
+  p.appendChild(body);
+  return p;
+}
+/* ---------- 1. Anonymous Intake Channel ---------- */
+RENDERERS.intake = function(){
+  const wrap = el('<div></div>');
+  const channelCounts = {};
+  CASES.forEach(c=>{ channelCounts[c.channel]=(channelCounts[c.channel]||0)+1; });
+  wrap.appendChild(el('<div class="stat-grid">'+
+    Object.keys(channelCounts).map(ch=>statCard(ch, channelCounts[ch], 'flat', 'reports received')).join('')+
+  '</div>'));
+
+  const headPanel = el('<div class="panel"></div>');
+  headPanel.appendChild(el(
+    '<div class="panel-head"><div><div class="panel-title">Submit a New Report</div>'+
+    '<div class="panel-desc">Available via web form, mobile app, hotline call, e-mail or walk-in — identity capture is optional on every channel.</div></div>'+
+    '<button class="btn btn-teal" id="newIntakeBtn">New Anonymous Report</button></div>'
+  ));
+  headPanel.appendChild(el('<div class="panel-body" style="padding-top:14px;"><div style="font-size:12.5px; color:var(--slate);">Every submission is issued a system-generated case ID immediately, independent of whether the reporter identifies themselves — this ID is the only reference needed to check status later.</div></div>'));
+  wrap.appendChild(headPanel);
+
+  wrap.appendChild(panelTable('Recent Intake Log','Most recent submissions across all channels, newest first',
+    ['Case ID','Channel','Identity','Category','Submitted','Status'],
+    [...CASES].sort((a,b)=>b.opened-a.opened).map(c=>[
+      '<span class="id-cell">'+c.id+'</span>', c.channel, c.anon?'<span class="badge b-gray">Anonymous</span>':'<span class="badge b-violet">Identified</span>',
+      c.category, fmtDate(c.opened), stageBadge(c.stage)
+    ])
+  ));
+  wrap.appendChild(headPanel.contains && null || document.createDocumentFragment());
+  setTimeout(()=>{
+    const btn = document.getElementById('newIntakeBtn');
+    if(btn) btn.addEventListener('click', openIntakeModal);
+  },0);
+  return wrap;
+};
+function openIntakeModal(){
+  const body =
+    '<div class="field"><label>Reporting Channel</label><select id="f_channel"><option>Web Form</option><option>Mobile App</option><option>Hotline (Call)</option><option>Email</option><option>Walk-in</option></select></div>'+
+    '<div class="field"><label>Reveal my identity to case handlers?</label><select id="f_anon"><option value="yes">No — remain anonymous</option><option value="no">Yes — identify myself</option></select></div>'+
+    '<div class="form-grid">'+
+      '<div class="field"><label>Category</label><select id="f_cat">'+CATEGORIES.map(c=>'<option>'+c+'</option>').join('')+'</select></div>'+
+      '<div class="field"><label>Department Involved</label><select id="f_dept">'+DEPARTMENTS.map(d=>'<option>'+d+'</option>').join('')+'</select></div>'+
+    '</div>'+
+    '<div class="field"><label>Entity / Location</label><select id="f_entity">'+ENTITIES.map(e=>'<option>'+e+'</option>').join('')+'</select></div>'+
+    '<div class="field"><label>Description</label><textarea id="f_desc" rows="4" placeholder="Describe what you observed, when, and who was involved..."></textarea></div>';
+  const foot = '<button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-teal" id="submitIntake">Submit Report</button>';
+  openModal('New Anonymous Report', body, foot);
+  document.getElementById('submitIntake').addEventListener('click',()=>{
+    const desc = document.getElementById('f_desc').value.trim();
+    const id = nextCaseId();
+    CASES.unshift({
+      id, channel:document.getElementById('f_channel').value, anon:document.getElementById('f_anon').value==='yes',
+      category:document.getElementById('f_cat').value, dept:document.getElementById('f_dept').value,
+      entity:document.getElementById('f_entity').value, stage:'Intake', severity:'Medium', handler:null,
+      opened:new Date(), sla:30, outcome:null, retaliationRisk:'Low', forum:null,
+      desc: desc || 'No description provided.', related:[], age:0, overdue:false
+    });
+    closeModal();
+    showToast(id+' logged — routed to Case Triage & Categorisation.');
+    go('intake');
+  });
+}
+/* ---------- 2. Case Triage & Categorisation ---------- */
+RENDERERS.triage = function(){
+  const wrap = el('<div></div>');
+  const untriaged = CASES.filter(c=>c.stage==='Intake');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Awaiting Triage', untriaged.length, untriaged.length>0?'up-bad':'up-good', 'New intakes not yet categorised')+
+    statCard('Critical / High Open', CASES.filter(c=>c.stage!=='Closed'&&(c.severity==='Critical'||c.severity==='High')).length, 'flat', 'Priority queue')+
+    statCard('Categories Tracked', CATEGORIES.length, 'flat', 'Standard taxonomy')+
+  '</div>'));
+
+  wrap.appendChild(panelTable('Triage Queue','Set category and severity for each new report; changing severity re-ranks priority instantly',
+    ['Case ID','Category','Department','Severity','Age','Action'],
+    CASES.filter(c=>c.stage!=='Closed').sort((a,b)=>sevRank(b.severity)-sevRank(a.severity)).map(c=>[
+      '<span class="id-cell">'+c.id+'</span>',
+      selectInline(c.id,'category',CATEGORIES,c.category),
+      c.dept,
+      selectInline(c.id,'severity',['Critical','High','Medium','Low'],c.severity),
+      c.age+'d',
+      c.stage==='Intake' ? '<button class="btn btn-sm btn-teal" data-advance="'+c.id+'">Move to Triage</button>' : '<span class="badge b-gray">'+c.stage+'</span>'
+    ])
+  ));
+  setTimeout(()=>{
+    document.querySelectorAll('[data-field]').forEach(sel=>{
+      sel.addEventListener('change',()=>{
+        const c = findCase(sel.dataset.case); c[sel.dataset.field]=sel.value;
+        showToast(sel.dataset.case+' updated — '+sel.dataset.field+' set to '+sel.value+'.');
+      });
+    });
+    document.querySelectorAll('[data-advance]').forEach(btn=>{
+      btn.addEventListener('click',()=>{ findCase(btn.dataset.advance).stage='Triage'; showToast(btn.dataset.advance+' moved to Triage.'); go('triage'); });
+    });
+  },0);
+  return wrap;
+};
+function selectInline(caseId, field, options, val){
+  return '<select data-case="'+caseId+'" data-field="'+field+'" style="min-width:150px;">'+
+    options.map(o=>'<option'+(o===val?' selected':'')+'>'+o+'</option>').join('')+'</select>';
+}
+
+/* ---------- 3. Conflict-Free Assignment ---------- */
+RENDERERS.assignment = function(){
+  const wrap = el('<div></div>');
+  const unassigned = CASES.filter(c=>!c.handler && c.stage!=='Closed');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Unassigned Cases', unassigned.length, unassigned.length>0?'up-bad':'up-good', 'Pending independent handler allocation')+
+    statCard('Active Handlers', HANDLERS.length, 'flat', 'Ethics, Audit, HR, Legal, External Counsel')+
+  '</div>'));
+  wrap.appendChild(panelTable('Assignment Queue','Confirm no conflict of interest before allocating a handler',
+    ['Case ID','Category','Department','Conflict Check','Assign Handler'],
+    unassigned.map(c=>[
+      '<span class="id-cell">'+c.id+'</span>', c.category, c.dept,
+      '<label style="display:flex; align-items:center; gap:6px; font-weight:400; font-size:12px;"><input type="checkbox" data-conflict="'+c.id+'"> No relationship to subject/dept</label>',
+      selectInline(c.id,'handler',['— Select handler —',...HANDLERS],'')
+    ])
+  ));
+  if(!unassigned.length) return wrap;
+  wrap.appendChild(panelTable('Currently Assigned','Active caseload by handler', ['Handler','Open Cases','Case IDs'],
+    HANDLERS.map(h=>{
+      const cs = CASES.filter(c=>c.handler===h && c.stage!=='Closed');
+      return [h, cs.length, cs.map(c=>c.id).join(', ')||'<span style="color:var(--slate);">—</span>'];
+    })
+  ));
+  setTimeout(()=>{
+    document.querySelectorAll('[data-field="handler"]').forEach(sel=>{
+      sel.addEventListener('change',()=>{
+        if(sel.value==='— Select handler —') return;
+        const chk = document.querySelector('[data-conflict="'+sel.dataset.case+'"]');
+        if(!chk.checked){ showToast('Complete the conflict-of-interest check first.'); sel.value=''; return; }
+        const c = findCase(sel.dataset.case); c.handler=sel.value; if(c.stage==='Intake') c.stage='Triage';
+        showToast(sel.dataset.case+' assigned to '+sel.value+'.'); go('assignment');
+      });
+    });
+  },0);
+  return wrap;
+};
+
+/* ---------- 5. Whistleblower Protection ---------- */
+RENDERERS.protection = function(){
+  const wrap = el('<div></div>');
+  const flagged = CASES.filter(c=>c.retaliationRisk!=='Low');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Elevated Retaliation Risk', flagged.length, flagged.length>0?'up-bad':'up-good','Medium or High flagged cases')+
+    statCard('Under Active Monitoring', CASES.filter(c=>c.retaliationRisk!=='Low'&&c.stage!=='Closed').length,'flat','12-month HRBP watch period')+
+  '</div>'));
+  wrap.appendChild(panelTable('Protection Register','Anti-retaliation safeguards applied per case',
+    ['Case ID','Complainant','Retaliation Risk','Safeguard Applied','Monitoring Owner'],
+    CASES.map(c=>[
+      '<span class="id-cell">'+c.id+'</span>',
+      c.anon?'<span class="badge b-gray">Anonymous</span>':'<span class="badge b-violet">Identified</span>',
+      riskBadge(c.retaliationRisk),
+      c.retaliationRisk==='High' ? 'Reporting-line change + HRBP check-ins' : (c.retaliationRisk==='Medium' ? 'Quarterly HRBP check-in' : 'Standard confidentiality only'),
+      c.retaliationRisk!=='Low' ? 'HR Compliance' : '—'
+    ])
+  ));
+  return wrap;
+};
+
+/* ---------- 6. SLA & Ageing Monitor ---------- */
+RENDERERS.sla = function(){
+  const wrap = el('<div></div>');
+  const open = CASES.filter(c=>c.stage!=='Closed');
+  const overdue = open.filter(c=>c.overdue);
+  const nearing = open.filter(c=>!c.overdue && c.age/c.sla>=0.75);
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Past SLA', overdue.length, overdue.length>0?'up-bad':'up-good','Escalation required')+
+    statCard('Nearing SLA (≥75%)', nearing.length,'flat','Watch list')+
+    statCard('On Track', open.length-overdue.length-nearing.length,'up-good','Within normal ageing')+
+  '</div>'));
+  wrap.appendChild(panelTable('Ageing Detail','Sorted by percentage of SLA consumed, most urgent first',
+    ['Case ID','Stage','Opened','Age','SLA Target','SLA Consumed'],
+    open.sort((a,b)=>(b.age/b.sla)-(a.age/a.sla)).map(c=>{
+      const pct=Math.min(140,Math.round(c.age/c.sla*100));
+      const color = pct>=100?'var(--red)':(pct>=75?'var(--amber)':'var(--teal)');
+      return [ '<span class="id-cell">'+c.id+'</span>', stageBadge(c.stage), fmtDate(c.opened), c.age+' days', c.sla+' days',
+        '<div style="min-width:140px;"><div class="bar-track"><div class="bar-fill" style="width:'+Math.min(100,pct)+'%; background:'+color+';"></div></div>'+
+        '<div style="font-size:10.5px; margin-top:3px; color:'+color+'; font-weight:600;">'+pct+'%'+(pct>=100?' overdue':'')+'</div></div>' ];
+    })
+  ));
+  return wrap;
+};
+
+/* ---------- 7. Substantiation Outcome ---------- */
+RENDERERS.substantiation = function(){
+  const wrap = el('<div></div>');
+  const decided = CASES.filter(c=>c.stage==='Closed');
+  const pending = CASES.filter(c=>c.stage==='Review');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Pending Disposition', pending.length,'flat','In Review stage')+
+    statCard('Substantiated (all-time)', CASES.filter(c=>c.outcome==='Substantiated').length,'flat','')+
+    statCard('Unsubstantiated (all-time)', CASES.filter(c=>c.outcome==='Unsubstantiated').length,'flat','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Record Disposition','Cases in Review awaiting a substantiation outcome',
+    ['Case ID','Category','Investigator','Outcome','Rationale'],
+    pending.map(c=>[
+      '<span class="id-cell">'+c.id+'</span>', c.category, c.handler||'—',
+      selectInline(c.id,'outcome',['— Select —','Substantiated','Partially Substantiated','Unsubstantiated','Inconclusive'],''),
+      '<input type="text" data-rationale="'+c.id+'" placeholder="Brief rationale...">'
+    ]), 'No cases currently awaiting disposition.'
+  ));
+  wrap.appendChild(panelTable('Closed — Outcome History','', ['Case ID','Category','Outcome','Closed'],
+    decided.map(c=>['<span class="id-cell">'+c.id+'</span>', c.category, outcomeBadge(c.outcome), fmtDate(c.opened)])
+  ));
+  setTimeout(()=>{
+    document.querySelectorAll('[data-field="outcome"]').forEach(sel=>{
+      sel.addEventListener('change',()=>{
+        if(sel.value==='— Select —') return;
+        const c = findCase(sel.dataset.case); c.outcome=sel.value; c.stage='Closed';
+        showToast(sel.dataset.case+' closed as '+sel.value+'.'); go('substantiation');
+      });
+    });
+  },0);
+  return wrap;
+};
+
+/* ---------- 8. Disciplinary Action Linkage ---------- */
+RENDERERS.disciplinary = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Actions Logged', DISCIPLINARY.length,'flat','Linked to substantiated cases')+
+    statCard('Completed', DISCIPLINARY.filter(d=>d.status==='Completed').length,'up-good','')+
+    statCard('In Progress', DISCIPLINARY.filter(d=>d.status==='In progress').length,'flat','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Disciplinary Action Register','Consequence management linked to case outcomes',
+    ['Case ID','Employee / Role','Action Taken','Status','Date'],
+    DISCIPLINARY.map(d=>['<span class="id-cell">'+d.case+'</span>', d.employee, d.action, statusBadge(d.status), fmtDate(d.date)])
+  ));
+  const substantiatedNoAction = CASES.filter(c=> (c.outcome==='Substantiated'||c.outcome==='Partially Substantiated') && !DISCIPLINARY.some(d=>d.case===c.id));
+  if(substantiatedNoAction.length){
+    wrap.appendChild(panelTable('Substantiated Cases Without a Linked Action','Closure control gap — RCM risk "Disciplinary action not linked to case outcome"',
+      ['Case ID','Category','Outcome'],
+      substantiatedNoAction.map(c=>['<span class="id-cell">'+c.id+'</span>', c.category, outcomeBadge(c.outcome)])
+    ));
+  }
+  return wrap;
+};
+/* ---------- 4. Investigation Tracking (Kanban) ---------- */
+RENDERERS.investigation = function(){
+  const wrap = el('<div></div>');
+  const board = el('<div class="panel"></div>');
+  board.appendChild(el('<div class="panel-head"><div><div class="panel-title">Case Pipeline</div><div class="panel-desc">Every open complaint, tracked stage by stage to closure</div></div></div>'));
+  const kb = el('<div class="panel-body"><div class="kanban" id="kanbanWrap"></div></div>');
+  board.appendChild(kb);
+  wrap.appendChild(board);
+  setTimeout(()=>{
+    const kw = document.getElementById('kanbanWrap');
+    STAGES.forEach(st=>{
+      const col = el('<div class="kcol"><div class="kcol-head"><span>'+st+'</span><span>'+caseByStage(st).length+'</span></div></div>');
+      caseByStage(st).forEach(c=>{
+        const card = el(
+          '<div class="kcard"><div class="kcard-id">'+c.id+'</div>'+
+          '<div class="kcard-title">'+c.category+'</div>'+
+          '<div class="kcard-meta">'+c.dept+' · '+severityBadge(c.severity)+'</div>'+
+          '<div class="kcard-meta">'+(c.handler? c.handler.split(' (')[0] : 'Unassigned')+' · '+c.age+'d</div></div>'
+        );
+        card.style.cursor='pointer';
+        card.addEventListener('click',()=>openCaseDetail(c.id));
+        col.appendChild(card);
+      });
+      kw.appendChild(col);
+    });
+  },0);
+  return wrap;
+};
+function openCaseDetail(id){
+  const c = findCase(id);
+  const body =
+    '<div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">'+stageBadge(c.stage)+severityBadge(c.severity)+riskBadge(c.retaliationRisk)+outcomeBadge(c.outcome)+'</div>'+
+    '<div class="field"><label>Category / Department</label><div style="font-size:13px;">'+c.category+' — '+c.dept+' ('+c.entity+')</div></div>'+
+    '<div class="field"><label>Description</label><div style="font-size:13px;">'+c.desc+'</div></div>'+
+    '<div class="form-grid">'+
+      '<div class="field"><label>Handler</label><div style="font-size:13px;">'+(c.handler||'Unassigned')+'</div></div>'+
+      '<div class="field"><label>Opened / Age</label><div style="font-size:13px;">'+fmtDate(c.opened)+' · '+c.age+' days</div></div>'+
+    '</div>'+
+    (c.related.length ? '<div class="field"><label>Related Cases</label><div style="font-size:13px;">'+c.related.join(', ')+'</div></div>' : '')+
+    '<div class="field"><label>Advance Stage</label>'+selectInline(c.id,'stage',STAGES,c.stage)+'</div>';
+  openModal(c.id, body, '<button class="btn btn-ghost" onclick="closeModal()">Close</button>');
+  setTimeout(()=>{
+    document.querySelectorAll('[data-field="stage"]').forEach(sel=>{
+      sel.addEventListener('change',()=>{
+        findCase(sel.dataset.case).stage = sel.value;
+        closeModal(); showToast(sel.dataset.case+' moved to '+sel.value+'.'); go('investigation');
+      });
+    });
+  },0);
+}
+
+/* ---------- 9. Trend & Hotspot Analytics (tables, no charts) ---------- */
+RENDERERS.trends = function(){
+  const wrap = el('<div></div>');
+  const byCategory = {}; const byDept = {};
+  CASES.forEach(c=>{ byCategory[c.category]=(byCategory[c.category]||0)+1; byDept[c.dept]=(byDept[c.dept]||0)+1; });
+  const catRows = Object.entries(byCategory).sort((a,b)=>b[1]-a[1]);
+  const deptRows = Object.entries(byDept).sort((a,b)=>b[1]-a[1]);
+  const max = Math.max(...catRows.map(r=>r[1]));
+  wrap.appendChild(panelTable('Cases by Category — Ranked','Highest-frequency issue types across the reporting period',
+    ['Rank','Category','Cases','Share'],
+    catRows.map((r,i)=>[ '#'+(i+1), r[0], r[1],
+      '<div style="min-width:160px;"><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(r[1]/max*100)+'%; background:var(--teal);"></div></div></div>'
+    ])
+  ));
+  wrap.appendChild(panelTable('Hotspot Departments','Departments generating the most reports',
+    ['Rank','Department','Cases','Critical/High'],
+    deptRows.map((r,i)=>[ '#'+(i+1), r[0], r[1], CASES.filter(c=>c.dept===r[0]&&(c.severity==='Critical'||c.severity==='High')).length ])
+  ));
+  return wrap;
+};
+
+/* ---------- 10. Committee / Board Reporting ---------- */
+RENDERERS.board = function(){
+  const wrap = el('<div></div>');
+  const headPanel = el('<div class="panel"></div>');
+  headPanel.appendChild(el('<div class="panel-head"><div><div class="panel-title">Board &amp; Committee Packs</div><div class="panel-desc">Governance-level summaries prepared for the Audit &amp; Risk Committee and Board</div></div>'+
+    '<button class="btn btn-teal" id="genReportBtn">Generate Current Period Summary</button></div>'));
+  wrap.appendChild(headPanel);
+  BOARD_REPORTS.forEach(r=>{
+    wrap.appendChild(el(
+      '<div class="panel"><div class="panel-body">'+
+        '<div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;">'+
+          '<div style="font-weight:700; font-family:Fraunces,serif; font-size:15px;">'+r.period+'</div>'+
+          '<div style="font-size:11.5px; color:var(--slate);">'+fmtDate(r.date)+'</div></div>'+
+        '<div style="font-size:12px; color:var(--slate); margin-bottom:8px;">Prepared by '+r.preparedBy+' · Presented to '+r.presentedTo+'</div>'+
+        '<div style="font-size:13px; color:var(--ink-soft);">'+r.summary+'</div>'+
+      '</div></div>'
+    ));
+  });
+  setTimeout(()=>{
+    const btn = document.getElementById('genReportBtn');
+    if(btn) btn.addEventListener('click',()=>{
+      const open = CASES.filter(c=>c.stage!=='Closed').length;
+      const closed = CASES.filter(c=>c.stage==='Closed').length;
+      const sub = CASES.filter(c=>c.outcome==='Substantiated').length;
+      BOARD_REPORTS.unshift({period:'Live Snapshot', preparedBy:'Chief Ethics Officer', presentedTo:'Audit & Risk Committee',
+        date:new Date(), summary: open+' cases currently open, '+closed+' closed to date, '+sub+' substantiated, '+CASES.filter(c=>c.overdue).length+' past SLA.'});
+      showToast('Summary generated for Board pack.'); go('board');
+    });
+  },0);
+  return wrap;
+};
+/* ---------- 11. Confidentiality Controls ---------- */
+RENDERERS.confidentiality = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Restricted Cases', CASES.filter(c=>c.stage!=='Closed').length,'flat','Access limited to assigned case team')+
+    statCard('Access Events (7d)', ACCESS_LOG.length,'flat','Logged view / edit / download actions')+
+    statCard('Roles With Case Access', 5,'flat','Ethics Office, Audit, HR, Legal, Independent Counsel')+
+  '</div>'));
+  wrap.appendChild(panelTable('Access Log','Every view, download or note on a case is recorded against the requesting identity',
+    ['When','User','Case','Action'],
+    [...ACCESS_LOG].sort((a,b)=>b.when-a.when).map(l=>[fmtDate(l.when), l.who, '<span class="id-cell">'+l.case+'</span>', l.action])
+  ));
+  wrap.appendChild(panelTable('Role-Based Access Matrix','Which roles can see identifying details vs. case summary only',
+    ['Role','Case Summary','Complainant Identity','Investigation Notes','Disciplinary Outcome'],
+    [
+      ['Chief Ethics Officer','Full','Full','Full','Full'],
+      ['Assigned Investigator','Full','Case-specific only','Full','View only'],
+      ['HR Compliance','Full','On need-to-know','Summary only','Full'],
+      ['Audit Committee','Aggregated only','No access','No access','Aggregated only'],
+      ['Line Manager (subject dept.)','No access','No access','No access','No access']
+    ]
+  ));
+  return wrap;
+};
+
+/* ---------- 12. Feedback to Complainant ---------- */
+RENDERERS.feedback = function(){
+  const wrap = el('<div></div>');
+  const cases = Object.keys(FEEDBACK_LOG);
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Cases With Closure Comms', cases.length,'flat','Timeline of updates sent to complainant')+
+    statCard('Avg. Updates per Case', (cases.reduce((s,k)=>s+FEEDBACK_LOG[k].length,0)/(cases.length||1)).toFixed(1),'flat','Acknowledgement → interim → outcome')+
+  '</div>'));
+  cases.forEach(cid=>{
+    const c = findCase(cid);
+    const panel = el('<div class="panel"></div>');
+    panel.appendChild(el('<div class="panel-head"><div><div class="panel-title">'+cid+' — '+(c?c.category:'')+'</div><div class="panel-desc">Communication trail sent back to the reporter</div></div>'+outcomeBadge(c?c.outcome:null)+'</div>'));
+    const body = el('<div class="panel-body"><div class="timeline"></div></div>');
+    const tl = body.querySelector('.timeline');
+    FEEDBACK_LOG[cid].forEach(f=>{
+      tl.appendChild(el('<div class="tl-item"><div class="tl-dot"></div><div class="tl-when">'+fmtDate(f.when)+'</div><div class="tl-what">'+f.what+'</div></div>'));
+    });
+    panel.appendChild(body);
+    wrap.appendChild(panel);
+  });
+  return wrap;
+};
+
+/* ---------- 13. Repeat-Complaint Linkage ---------- */
+RENDERERS.repeat = function(){
+  const wrap = el('<div></div>');
+  const linked = CASES.filter(c=>c.related.length>0);
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Linked Case Clusters', new Set(linked.flatMap(c=>[c.id,...c.related])).size ? Math.ceil(linked.length/2) : 0,'flat','Related complaints grouped together')+
+    statCard('Cases With a Link', linked.length,'flat','Referencing at least one other case')+
+  '</div>'));
+  wrap.appendChild(panelTable('Linked Cases','Connected because they share a subject, department pattern, or a retaliation follow-up',
+    ['Case ID','Category','Linked To','Relationship'],
+    linked.map(c=>[
+      '<span class="id-cell">'+c.id+'</span>', c.category, c.related.map(r=>'<span class="id-cell">'+r+'</span>').join(', '),
+      c.category==='Retaliation' ? 'Retaliation follow-up to prior report' : 'Same subject / recurring pattern'
+    ]), 'No linked cases currently identified.'
+  ));
+  return wrap;
+};
+
+/* ---------- 14. POSH / HR Grievance Split ---------- */
+RENDERERS.posh = function(){
+  const wrap = el('<div></div>');
+  const routed = CASES.filter(c=>c.forum);
+  const byForum = {}; routed.forEach(c=>{ byForum[c.forum]=(byForum[c.forum]||0)+1; });
+  wrap.appendChild(el('<div class="stat-grid">'+
+    Object.keys(byForum).map(f=>statCard(f, byForum[f],'flat','cases routed')).join('')+
+    statCard('Awaiting Routing', CASES.filter(c=>!c.forum).length,'flat','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Routing Decisions','Determines whether a complaint proceeds through the Ethics channel, the POSH Committee, or standard HR grievance process',
+    ['Case ID','Category','Suggested Forum','Confirmed Forum'],
+    CASES.map(c=>{
+      const suggestion = c.category==='Workplace Harassment' ? 'POSH Committee' : (c.category==='Discrimination'||c.category==='H&S Violation' ? 'HR Grievance' : 'Ethics');
+      return ['<span class="id-cell">'+c.id+'</span>', c.category, suggestion, c.forum ? '<span class="badge b-teal">'+c.forum+'</span>' : '<span class="badge b-amber">Pending confirmation</span>'];
+    })
+  ));
+  return wrap;
+};
+
+/* ---------- 15. Ethics-Culture Survey ---------- */
+RENDERERS.survey = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(panelTable('Survey Waves','Speak-up climate measurement across the organisation',
+    ['Survey','Period','Response Rate','Comfort Reporting','Channel Awareness','Fear of Retaliation','Status'],
+    SURVEYS.map(s=>{
+      const rr = s.eligible ? Math.round(s.responses/s.eligible*100) : 0;
+      return [s.name, s.period, s.responses+' / '+s.eligible+' ('+rr+'%)',
+        s.status==='Closed'? s.comfortReporting+'%':'—', s.status==='Closed'? s.awarenessOfChannel+'%':'—',
+        s.status==='Closed'? s.fearOfRetaliation+'%':'—', statusBadge(s.status)];
+    })
+  ));
+  const closedSurveys = SURVEYS.filter(s=>s.status==='Closed');
+  const avgComfort = Math.round(closedSurveys.reduce((s,x)=>s+x.comfortReporting,0)/closedSurveys.length);
+  const avgFear = Math.round(closedSurveys.reduce((s,x)=>s+x.fearOfRetaliation,0)/closedSurveys.length);
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Avg. Comfort Reporting', avgComfort+'%','up-good','Across closed survey waves')+
+    statCard('Avg. Fear of Retaliation', avgFear+'%', avgFear>20?'up-bad':'flat','Lower is better')+
+  '</div>'));
+  return wrap;
+};
+/* ---------- 17. Scope & Audit Universe ---------- */
+RENDERERS.scope = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Entities in Scope', SCOPE_UNITS.length,'flat','of '+ENTITIES.length+' total entities')+
+    statCard('High-Risk Units', SCOPE_UNITS.filter(u=>u.riskRating==='High').length,'flat','')+
+    statCard('Avg. Days Since Review', Math.round(SCOPE_UNITS.reduce((s,u)=>s+daysBetween(u.lastReviewed,new Date()),0)/SCOPE_UNITS.length),'flat','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Audit Universe','Auditable units, entities and processes in scope for this module',
+    ['Entity','Process in Scope','Owner','Risk Rating','Last Reviewed'],
+    SCOPE_UNITS.map(u=>[u.entity, u.process, u.owner, riskBadge(u.riskRating), fmtDate(u.lastReviewed)])
+  ));
+  return wrap;
+};
+
+/* ---------- 18. Risk & Control Matrix ---------- */
+RENDERERS.rcm = function(){
+  const wrap = el('<div></div>');
+  const effMap = {Effective:'b-teal','Partially Effective':'b-amber','Needs Improvement':'b-amber','Not Tested':'b-gray'};
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Risks Catalogued', RCM.length,'flat','')+
+    statCard('Controls Operating Effectively', RCM.filter(r=>r.operating==='Effective').length,'up-good','')+
+    statCard('Needing Attention', RCM.filter(r=>r.operating!=='Effective').length, RCM.filter(r=>r.operating!=='Effective').length>0?'up-bad':'up-good','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Risk & Control Matrix','Risks, mapped controls, assertions and control ownership',
+    ['Risk','Control','Assertion','Owner','Design','Operating'],
+    RCM.map(r=>[r.risk, r.control, r.assertion, r.owner,
+      '<span class="badge '+(effMap[r.design]||'b-gray')+'">'+r.design+'</span>',
+      '<span class="badge '+(effMap[r.operating]||'b-gray')+'">'+r.operating+'</span>'])
+  ));
+  return wrap;
+};
+
+/* ---------- 19. Test & Analytics Rule Library ---------- */
+RENDERERS.rules = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Active Rules', RULES.filter(r=>r.active).length,'up-good','')+
+    statCard('Inactive Rules', RULES.filter(r=>!r.active).length,'flat','')+
+    statCard('Real-time Rules', RULES.filter(r=>r.frequency==='Real-time').length,'flat','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Rule Library','Automated red-flag rules, thresholds and CAAT scripts feeding the Exception Queue',
+    ['Rule','Script ID','Threshold Logic','Run Frequency','Status'],
+    RULES.map((r,i)=>[r.name, '<span class="id-cell">'+r.script+'</span>', r.threshold, r.frequency,
+      '<label style="display:flex; align-items:center; gap:6px; font-weight:400;"><input type="checkbox" '+(r.active?'checked':'')+' data-rule="'+i+'"> '+(r.active?'Active':'Inactive')+'</label>'])
+  ));
+  setTimeout(()=>{
+    document.querySelectorAll('[data-rule]').forEach(chk=>{
+      chk.addEventListener('change',()=>{ RULES[chk.dataset.rule].active = chk.checked; showToast(RULES[chk.dataset.rule].name+(chk.checked?' activated.':' deactivated.')); go('rules'); });
+    });
+  },0);
+  return wrap;
+};
+
+/* ---------- 20. Data Source & Connector Setup ---------- */
+RENDERERS.connectors = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Connected Sources', CONNECTORS.filter(c=>c.status==='Connected').length,'up-good','')+
+    statCard('Needs Attention', CONNECTORS.filter(c=>c.status!=='Connected').length, CONNECTORS.filter(c=>c.status!=='Connected').length>0?'up-bad':'up-good','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Connector Map','ERP tables, APIs and manual uploads that feed this module\'s analytics',
+    ['Source System','Integration Type','Feeds','Status','Last Sync'],
+    CONNECTORS.map(c=>[c.name, c.type, c.feeds, statusBadge(c.status), fmtDate(c.lastSync)])
+  ));
+  return wrap;
+};
+
+/* ---------- 21. Sampling & Population Builder ---------- */
+RENDERERS.sampling = function(){
+  const wrap = el('<div></div>');
+  const headPanel = el('<div class="panel"></div>');
+  headPanel.appendChild(el('<div class="panel-head"><div><div class="panel-title">Build a New Sample</div><div class="panel-desc">Draw a statistical or judgemental sample from a defined population</div></div></div>'));
+  headPanel.appendChild(el(
+    '<div class="panel-body"><div class="form-grid">'+
+      '<div class="field"><label>Population</label><input type="text" id="sp_pop" placeholder="e.g. Closed cases FY2026"></div>'+
+      '<div class="field"><label>Population Size</label><input type="number" id="sp_size" placeholder="e.g. 40"></div>'+
+      '<div class="field"><label>Method</label><select id="sp_method"><option>Statistical (95% CI, 5% precision)</option><option>Judgemental — full population</option><option>Judgemental — risk-weighted</option></select></div>'+
+      '<div class="field"><label>Sample Size</label><input type="number" id="sp_sample" placeholder="e.g. 25"></div>'+
+    '</div><button class="btn btn-teal" id="drawSampleBtn">Draw Sample</button></div>'
+  ));
+  wrap.appendChild(headPanel);
+  wrap.appendChild(panelTable('Sample History','', ['Sample','Population Size','Method','Sample Size','Drawn On'],
+    SAMPLES.map(s=>[s.name, s.population, s.method, s.sampleSize, fmtDate(s.drawnOn)])
+  ));
+  setTimeout(()=>{
+    document.getElementById('drawSampleBtn').addEventListener('click',()=>{
+      const pop = document.getElementById('sp_pop').value.trim() || 'Untitled population';
+      SAMPLES.unshift({name:pop, population:Number(document.getElementById('sp_size').value)||0, method:document.getElementById('sp_method').value,
+        sampleSize:Number(document.getElementById('sp_sample').value)||0, drawnOn:new Date()});
+      showToast('Sample drawn for "'+pop+'".'); go('sampling');
+    });
+  },0);
+  return wrap;
+};
+
+/* ---------- 22. Exception & Red-Flag Queue ---------- */
+RENDERERS.exceptions = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Open Exceptions', EXCEPTIONS.filter(e=>e.disposition==='Under review'||e.disposition==='Monitoring').length,'up-bad','')+
+    statCard('Escalated to a Case', EXCEPTIONS.filter(e=>String(e.disposition).startsWith('Escalated')).length,'flat','')+
+    statCard('Cleared', EXCEPTIONS.filter(e=>e.disposition.includes('cleared')).length,'up-good','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Exception Queue','System-generated red flags awaiting triage and disposition',
+    ['Flagged','Rule Triggered','Reference','Detail','Disposition'],
+    [...EXCEPTIONS].sort((a,b)=>b.flaggedOn-a.flaggedOn).map(e=>[fmtDate(e.flaggedOn), e.rule, '<span class="id-cell">'+e.ref+'</span>', e.detail, statusBadge(e.disposition)])
+  ));
+  return wrap;
+};
+
+/* ---------- 23. Working Papers & Evidence ---------- */
+RENDERERS.workpapers = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Working Papers Logged', WORKPAPERS.length,'flat','')+
+    statCard('Pending Sign-off', WORKPAPERS.filter(w=>w.signOff==='Pending').length, WORKPAPERS.filter(w=>w.signOff==='Pending').length>0?'up-bad':'up-good','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Working Papers & Evidence','Attached evidence, tick-marks and reviewer sign-off per case',
+    ['Reference','Case ID','Title','Preparer','Reviewer','Sign-off','Updated'],
+    WORKPAPERS.map(w=>['<span class="id-cell">'+w.ref+'</span>', '<span class="id-cell">'+w.case+'</span>', w.title, w.preparer, w.reviewer, statusBadge(w.signOff), fmtDate(w.updated)])
+  ));
+  return wrap;
+};
+
+/* ---------- 24. Observation & Finding Log ---------- */
+RENDERERS.findings = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('Findings Raised', FINDINGS.length,'flat','')+
+    statCard('Open / In Remediation', FINDINGS.filter(f=>f.status==='Open'||f.status==='In remediation').length,'flat','')+
+    statCard('Critical / High Grade', FINDINGS.filter(f=>f.grade==='Critical'||f.grade==='High').length,'flat','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Findings Log','Observations raised, graded and routed to the accountable owner',
+    ['Case ID','Finding','Grade','Routed To','Status','Raised'],
+    FINDINGS.map(f=>['<span class="id-cell">'+f.case+'</span>', f.title, severityBadge(f.grade), f.route, statusBadge(f.status), fmtDate(f.raised)])
+  ));
+  return wrap;
+};
+
+/* ---------- 25. Remediation / Action Tracker ---------- */
+RENDERERS.remediation = function(){
+  const wrap = el('<div></div>');
+  wrap.appendChild(el('<div class="stat-grid">'+
+    statCard('CAPA Items', REMEDIATION.length,'flat','')+
+    statCard('Completed', REMEDIATION.filter(r=>r.status==='Completed').length,'up-good','')+
+    statCard('Overdue', REMEDIATION.filter(r=>r.status!=='Completed' && r.due<new Date()).length, REMEDIATION.filter(r=>r.status!=='Completed' && r.due<new Date()).length>0?'up-bad':'up-good','')+
+  '</div>'));
+  wrap.appendChild(panelTable('Remediation Tracker','Corrective and preventive action items tied to logged findings',
+    ['Finding','Owner','Action','Due','Status'],
+    REMEDIATION.map(r=>[r.finding, r.owner, r.action, fmtDate(r.due), statusBadge(r.status)])
+  ));
+  return wrap;
+};
+
+/* ============================= init ============================= */
+render();
+</script>
+</body>
+</html>
